@@ -100,7 +100,7 @@ public class applicationDBAuthenticationGoodComplete{
 		fields ="usergood.userName, roleusergood.roleId, usergood.Name ";
 		whereClause=" usergood.userName = roleusergood.userName and usergood.userName='" +userName +"' and role.roleId=roleusergood.roleId and ";
 		whereClause+=" rolewebpagegood.roleId=role.roleId and rolewebpagegood.pageURL=webpagegood.pageURL and webpagegood.pageURL='" +currentPage+"' and ";
-		whereClause+=" webpageprevious.previousPageURL='"+previousPage+"'";
+		whereClause+=" webpageprevious.previousPageURL='"+previousPage+"'webpagegood.pageURL = webpageprevious.currentpageURL'";
 		whereClause+=" webpage";
 		
 		
