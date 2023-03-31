@@ -4,7 +4,7 @@
 <%@ page import="java.sql.*"%>
 <html>
 	<head>
-		<title>Your first web form!</title>
+		<title>Mini-Facebook!</title>
 	</head>
 	<body>
 
