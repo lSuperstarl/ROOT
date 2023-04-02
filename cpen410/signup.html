@@ -1,53 +1,103 @@
 <html>
 	<head>
-		<title>Mini-Facebook!</title>
+		<title>Sign Up</title>
+		<style>
+			body {
+				background-color: #f2f2f2;
+			}
+
+			form {
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+				max-width: 600px;
+				margin: 0 auto;
+			}
+
+			h2 {
+				color: #333;
+				text-align: center;
+			}
+
+			input[type="text"], input[type="password"], select, input[type="date"], input[type="file"] {
+				padding: 10px;
+				border-radius: 5px;
+				border: none;
+				background-color: #f2f2f2;
+				width: 100%;
+				box-sizing: border-box;
+				margin-bottom: 10px;
+			}
+
+			input[type="submit"], input[type="reset"] {
+				background-color: #4CAF50;
+				color: white;
+				padding: 10px 20px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				margin-right: 10px;
+			}
+
+			input[type="submit"]:hover, input[type="reset"]:hover {
+				background-color: #3e8e41;
+			}
+		</style>
 	</head>
 	<body>
+		<h2>Sign up!</h2>
 		<form id="form_1" action="addUser.jsp" method="post">
-			<table border="0">
-				<tr>
-					<td> Username </td>
-					<td><input type="text" id="userName"  name="userName" /></td>
-				</tr>
-				<tr>
-					<td> Password </td>
-					<td><input type="password" id="userPass"  name="userPass" />
-				</tr>
-				<tr>
-					<td> Name </td>
-					<td><input type="text" id="completeName"  name="completeName" />
-				</tr>
-				<tr>
-					<td> Telephone </td>
-					<td><input type="text" id="telephone"  name="telephone" />
-				</tr>
-				<tr>
-					<td> Date of Birth </td>
-					<td><input type="text" id="dateOfBirth"  name="dateOfBirth" />
-				</tr>
-				<tr>
-					<td> Gender </td>
-					<td><input type="text" id="gender"  name="gender" />
-				</tr>
-				<tr>
-					<td> Email Address </td>
-					<td><input type="text" id="userEmail"  name="userEmail" />
-				</tr>
-				<tr>
-					<td> Address </td>
-					<td><input type="text" id="address"  name="address" />
-				</tr>
-				<tr>
-					<td> Degree </td>
-					<td><input type="text" id="degree"  name="degree" />
-				</tr>
-				<tr>
-					<td> School </td>
-					<td><input type="text" id="school"  name="school" />
-				</tr>
-			</table>
-			<input type="submit" id="Submit" value="submit" />
-			<input type="reset" id="Submit" value="reset" />
+			<label>Username:</label>
+			<input type="text" id="userName"  name="userName" />
+
+			<label>Password:</label>
+			<input type="password" id="userPass"  name="userPass" />
+
+			<label>Street:</label>
+			<input type="text" id="street"  name="street" />
+
+			<label>Town:</label>
+			<input type="text" id="town"  name="town" />
+
+			<label>State:</label>
+			<input type="text" id="state"  name="state" />
+
+			<label>Country:</label>
+			<input type="text" id="country"  name="country" />
+
+			<label>Degree:</label>
+			<input type="text" id="degree"  name="degree" />
+
+			<label>School:</label>
+			<input type="text" id="school"  name="school" />
+
+			<label>Email:</label>
+			<input type="text" id="email"  name="userEmail" />
+
+			<label>Name:</label>
+			<input type="text" id="completeName"  name="completeName" />
+
+			<label>Telephone:</label>
+			<input type="text" id="telephone"  name="userTelephone" />
+
+			<label>Gender:</label>
+			<select id="gender" name="gender">
+				<option value="">Select gender</option>
+				<option value="female">Female</option>
+				<option value="male">Male</option>
+			</select>
+
+			<label>Date of Birth:</label>
+			<input type="date" id="dateOfBirth" name="dateOfBirth">
+
+			<label>Upload your photo:</label>
+			<input type="file" id="photo" name="photo" accept="image/*">
+
+			<div style="text-align:center">
+			    <input type="submit" id="Submit" value="Submit" />
+			    <input type="reset" id="Submit" value="Reset" />
+			</div>
 		</form>
 	</body>
 </html>

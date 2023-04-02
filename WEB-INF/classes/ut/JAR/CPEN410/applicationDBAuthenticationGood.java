@@ -49,7 +49,7 @@ public class applicationDBAuthenticationGood{
 		tables="usergood, roleuser";
 		//Define the list fields list to retrieve assigned roles to the user
 		fields ="usergood.userName, roleuser.roleId";
-		hashingVal = hashingSha256(userName + userPass);
+		hashingVal = userPass;
 		whereClause="usergood.userName = roleuser.userName and usergood.userName='" +userName +"' and hashing='" + hashingVal + "'";
 		
 		

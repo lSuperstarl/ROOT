@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>User Search</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+		table {
+			border-collapse: collapse;
+			margin: auto;
+            text-align: center;
+            color: #333;
+		}
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+		td {
+			padding: 10px;
+			border: 1px solid black;
+			width: 250px;
+            text-align: center;
+            color: #333;
+		}
+		input[type="submit"] {
+			margin-top: 20px;
+			padding: 5px 20px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+            text-align: center;
+		}
+		input[type="submit"]:hover {
+			background-color: #45a049;
+            text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>User Search</h1>
+	<form method="post" action="searchUser.jsp">
+		<table>
+			<tr>
+				<td><label for="completeName">Name:</label></td>
+				<td><input type="text" id="completeName" name="completeName"></td>
+			</tr>
+			<tr>
+				<td><label for="age">Age:</label></td>
+				<td><input type="number" id="age" name="age"></td>
+			</tr>
+			<tr>
+				<td><label for="gender">Gender:</label></td>
+				<td>
+					<select id="gender" name="gender">
+						<option value="">Select gender</option>
+						<option value="Male">Male</option>
+						<option value="Female">Female</option>
+						<option value="Other">Other</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="street">Street:</label></td>
+				<td><input type="text" id="street" name="street"></td>
+			</tr>
+			<tr>
+				<td><label for="town">Town:</label></td>
+				<td><input type="text" id="town" name="town"></td>
+			</tr>
+			<tr>
+				<td><label for="state">State:</label></td>
+				<td><input type="text" id="state" name="state"></td>
+			</tr>
+			<tr>
+				<td><label for="country">Country:</label></td>
+				<td><input type="text" id="country" name="country"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="Search"></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

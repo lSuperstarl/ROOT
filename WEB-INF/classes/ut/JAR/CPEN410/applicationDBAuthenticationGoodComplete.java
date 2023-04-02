@@ -39,21 +39,21 @@ public class applicationDBAuthenticationGoodComplete{
 			@returns:
 				A ResultSet containing the userName and all roles assigned to her.
 	*/
-	public ResultSet authenticate(String userName, String userPass)
+	public ResultSet authenticate(String username, String password)
 	{
 		
 		//Declare function variables
 		String fields, tables, whereClause, hashingVal;
 		
 		//Define the table where the selection is performed
-		tables="usergood, roleuser";
+		tables="userinformation, rolesforuser";
 		//Define the list fields list to retrieve assigned roles to the user
-		fields ="usergood.userNam , roleuser.roleId, usergood.Name";
-		hashingVal = hashingSha256(userName + userPass);
-		whereClause="usergood.userName = roleuser.userName and usergood.userName='" +userName +"' and hashing='" + hashingVal + "'";
+		fields ="userinformation.username , rolesforuser.Id, userinformation.Name";
+		hashingVal = hashingSha256(username + password);
+		whereClause="where userinformation.username = rolesforuser.UserName and userinformation.username='" + username +"' and passwordhash='" + hashingVal + "'";
 		
 		
-		System.out.println("listing...");
+		System.out.println("User: " + username + " Has logged In!");
 		
 		//Return the ResultSet containing all roles assigned to the user
 		return myDBConn.doSelect(fields, tables, whereClause);
@@ -112,19 +112,25 @@ public class applicationDBAuthenticationGoodComplete{
 		
 	}
 	
-	public boolean addUser(String userName, String completeName, String userPass, String userTelephone)
+	public boolean addUser(String userName, String completeName, String userPass, String userTelephone, String dateOfBirth, String gender, String userEmail, String street, String town, String state, String country, String degree, String school)
 	{
-		boolean res;
-		String table, values, hashingValue;
-		hashingValue=hashingSha256(userName + userPass);
-		table="usergood";
-		values="'"+userName+"', '" +hashingValue+"', '"+ completeName + "', '" + userTelephone + "'";
-		res=myDBConn.doInsert(table, values);
-		System.out.println("Insertion result" + res);
+		boolean res = false;
+		String userTable = "UserInformation";
+		String addressTable = "AddressInformation";
+		String hashingValue = hashingSha256(userName + userPass);
+
+		String userValues = "'" + userName + "', '" + hashingValue + "', '" + completeName + "', '" + userTelephone + "', '" + dateOfBirth + "', '" + gender + "', '" + userEmail + "'";
+		res = myDBConn.doInsert(userTable, userValues);
+		String addressValues = "'" + userName + "', '" + degree + "', '" + school + "', '" + street + "', '" + town + "', '" + state + "', '" + country + "'";
+		res &= myDBConn.doInsert(addressTable, addressValues);
+
+		// Special insert to add automatic roles. Add userRole and change manually if needed.
+		String query = "INSERT INTO RolesForUser (username, roleID) VALUES ('" + userName + "', 2);";
+		res &= myDBConn.doRoleInsert(query);
+		
+		System.out.println("Insertion result: " + res);
 		return res;
 	}
-	
-	
 	
 	/*********
 		hashingSha256 method
@@ -136,6 +142,50 @@ public class applicationDBAuthenticationGoodComplete{
 	{
 			String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(plainText); 
 			return sha256hex;
+	}
+	
+	public ResultSet searchUser(String town, String street, String state, String country, String age, String gender, String name) {
+		String fields, tables, whereClause;
+	
+		fields = "userinformation.*, addressinformation.*";
+		tables = "userinformation INNER JOIN addressinformation ON userinformation.UserName = addressinformation.UserName";
+		whereClause = "";
+	
+		if (town == null && street == null && state == null && country == null && age == null && gender == null && name == null) {
+			// no search parameters provided, return empty ResultSet
+			return myDBConn.doSelect(fields, tables, "");
+		}        
+	
+		if (town != null && !town.isEmpty()) {
+			whereClause += "addressinformation.Town = '" + town + "' AND ";
+		}
+		if (street != null && !street.isEmpty()) {
+			whereClause += "addressinformation.Street = '" + street + "' AND ";
+		}
+		if (state != null && !state.isEmpty()) {
+			whereClause += "addressinformation.State = '" + state + "' AND ";
+		}
+		if (country != null && !country.isEmpty()) {
+			whereClause += "addressinformation.Country = '" + country + "' AND ";
+		}
+		if (age != null && !age.isEmpty()) {
+			whereClause += "userinformation.dob <= DATE_SUB(CURDATE(), INTERVAL " + age + " YEAR) AND ";
+		}
+		if (gender != null && !gender.isEmpty()) {
+			whereClause += "userinformation.gender = '" + gender + "' AND ";
+		}
+		if (name != null && !name.isEmpty()) {
+			whereClause += "userinformation.Name = '" + name + "' AND ";
+		}
+	
+		if (!whereClause.isEmpty()) {
+			// remove trailing "AND " from whereClause
+			whereClause = whereClause.substring(0, whereClause.length() - 5);
+			whereClause = "WHERE " + whereClause;
+		}
+	
+		System.out.println("listing search results...");
+		return myDBConn.doSelect(fields, tables, whereClause);
 	}
 	
 	

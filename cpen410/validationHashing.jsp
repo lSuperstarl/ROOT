@@ -10,19 +10,19 @@
 
 <%
 	//Retrieve variables
-	String userName = request.getParameter("userName");
-	String userPass = request.getParameter("userPass");
+	String username = request.getParameter("username");
+	String password = request.getParameter("password");
 	
 	
 	//Try to connect the database using the applicationDBManager class
 	try{
 			//Create the appDBMnger object
-			applicationDBAuthenticationGood appDBAuth = new applicationDBAuthenticationGood();
+			applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
 			System.out.println("Connecting...");
 			System.out.println(appDBAuth.toString());
 			
 			//Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-			ResultSet res=appDBAuth.authenticate(userName, userPass);%>
+			ResultSet res=appDBAuth.authenticate(username, password);%>
 		
 			
 			
@@ -34,24 +34,24 @@
 				session.setAttribute("currentPage", "validationHashing.jsp");
 				
 				//Create a session variable
-				if (session.getAttribute("userName")==null ){
+				if (session.getAttribute("username")==null ){
 					//create the session variable
-					session.setAttribute("userName", userName);
+					session.setAttribute("username", username);
 				} else{
 					//Update the session variable
-					session.setAttribute("userName", userName);
+					session.setAttribute("username", username);
 				}
 				
 				//redirect to the welcome page
 				//response.sendRedirect("welcome.jsp");
-				response.sendRedirect("welcomeMenu.jsp");
+				response.sendRedirect("homePage.html");
 				
 			}else{
 				//Close any session associated with the user
-				session.setAttribute("userName", null);
+				session.setAttribute("username", null);
 				
 				//return to the login page
-				response.sendRedirect("loginHashing.html");
+				response.sendRedirect("login.html");
 				}
 				res.close();
 				//Close the connection to the database
@@ -61,12 +61,12 @@
 			{%>
 				Nothing to show!
 				<%e.printStackTrace();
-				response.sendRedirect("loginHashing.html");
+				response.sendRedirect("login.html");
 			}finally{
 				System.out.println("Finally");
 			}
 			%>		
-		sessionName=<%=session.getAttribute("userName")%>
+		sessionName=<%=session.getAttribute("username")%>
 		
 		
 	</body>

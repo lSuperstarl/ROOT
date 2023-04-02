@@ -13,11 +13,14 @@
 	String userName = request.getParameter("userName");
 	String userPass = request.getParameter("userPass");
 	String completeName = request.getParameter("completeName");
-	String telephone = request.getParameter("telephone");
+	String telephone = request.getParameter("userTelephone");
 	String dateOfBirth = request.getParameter("dateOfBirth");
 	String gender = request.getParameter("gender");
 	String userEmail = request.getParameter("userEmail");
-	String address = request.getParameter("address");
+	String street = request.getParameter("street");
+	String town = request.getParameter("town");
+	String state = request.getParameter("state");
+	String country = request.getParameter("country");
 	String degree = request.getParameter("degree");
 	String school = request.getParameter("school");
 	
@@ -26,12 +29,12 @@
 	//Try to connect the database using the applicationDBManager class
 	try{
 			//Create the appDBMnger object
-			applicationDBAuthenticationGood appDBAuth = new applicationDBAuthenticationGood();
+			applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
 			System.out.println("Connecting...");
 			System.out.println(appDBAuth.toString());
 			
 			//Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-			boolean res=appDBAuth.addUser(userName, completeName, userPass, telephone, dateOfBirth, gender, userEmail, address, degree, school);%>
+			boolean res=appDBAuth.addUser(userName, completeName, userPass, telephone, dateOfBirth, gender, userEmail, street, town, state, country, degree, school);%>
 		
 			
 			

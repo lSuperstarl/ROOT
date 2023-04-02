@@ -10,7 +10,7 @@ import java.sql.* ;
 public class MySQLCompleteConnector{
 
 	//Database credential <jdbc:<protocol>://<hostName>/<databaseName>>
-	private String DB_URL="jdbc:mysql://localhost/cpen410";
+	private String DB_URL="jdbc:mysql://localhost/social_network";
 	
 	//Database authorized user information
 	private String USER="student";
@@ -95,7 +95,7 @@ public class MySQLCompleteConnector{
 		ResultSet result=null;
 		
 		//Create the selection statement 
-		String selectionStatement = "Select " + fields+ " from " + tables + " where " + where + " ;";
+		String selectionStatement = "Select " + fields+ " from " + tables + " " + where + " ;";
 		System.out.println(selectionStatement);
 		
 		try{
@@ -185,6 +185,28 @@ public class MySQLCompleteConnector{
 	{
 		boolean res=false;
 		String charString ="INSERT INTO "+ table + " values (" + values +");";
+		System.out.println(charString);
+		//try to insert a record to the selected table
+		try{
+			 res=stmt.execute(charString);
+			 System.out.println("MySQLCompleteConnector insertion: " + res);
+			 
+		}
+		catch(Exception e)
+		{
+			
+			e.printStackTrace();
+		}
+		finally{
+			
+		}
+			return res;
+	}
+
+	public boolean doRoleInsert(String query)
+	{
+		boolean res=false;
+		String charString = query;
 		System.out.println(charString);
 		//try to insert a record to the selected table
 		try{
