@@ -169,6 +169,24 @@ public class MySQLCompleteConnector{
 			return result;
 		}
 	}
+
+	public ResultSet doPageSelect(String query){
+		
+		//Create a ResulSet
+		ResultSet result=null;
+		
+		
+		try{
+			//perform the query and catch results in the result object
+			result = stmt.executeQuery(query);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			//return results
+			return result;
+		}
+	}
 	
 	/***********
 		doInsertion method
@@ -189,6 +207,28 @@ public class MySQLCompleteConnector{
 		//try to insert a record to the selected table
 		try{
 			 res=stmt.execute(charString);
+			 System.out.println("MySQLCompleteConnector insertion: " + res);
+			 
+		}
+		catch(Exception e)
+		{
+			
+			e.printStackTrace();
+		}
+		finally{
+			
+		}
+			return res;
+	}
+
+	public boolean doDelete(String table, String where)
+	{
+		boolean res=false;
+		String queryString ="DELETE FROM "+ table + " where " + where + ";";
+		System.out.println(queryString);
+		//try to insert a record to the selected table
+		try{
+			 res=stmt.execute(queryString);
 			 System.out.println("MySQLCompleteConnector insertion: " + res);
 			 
 		}
@@ -225,6 +265,26 @@ public class MySQLCompleteConnector{
 			return res;
 	}
 	
+	public ResultSet doSelect(){
+		
+		//Create a ResulSet
+		ResultSet result=null;
+		
+		//Create the selection statement 
+		String selectionStatement = null;
+		
+		try{
+			//perform the query and catch results in the result object
+			result = stmt.executeQuery(selectionStatement);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			//return results
+			return result;
+		}
+	}
+
 	/***********
 		Debugging method
 			This method creates an applicationDBManager object, retrieves all departments in the database, and close the connection to the database

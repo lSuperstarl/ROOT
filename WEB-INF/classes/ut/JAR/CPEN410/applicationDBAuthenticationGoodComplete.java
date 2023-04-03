@@ -8,11 +8,22 @@ import java.sql.* ;
 //Import hashing functions
 import org.apache.commons.codec.*;
 
+// File Operations to handle byte streams when user uploads profile picture
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.*;
+
 /******
 	This class authenticate users using userName and passwords
 
 */
-public class applicationDBAuthenticationGoodComplete{
+@MultipartConfig(
+		fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+		maxFileSize = 1024 * 1024 * 10,      // 10 MB
+		maxRequestSize = 1024 * 1024 * 100   // 100 MB
+	)
+public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 
 	//myDBConn is an MySQLConnector object for accessing to the database
 	private MySQLCompleteConnector myDBConn;
@@ -39,6 +50,49 @@ public class applicationDBAuthenticationGoodComplete{
 			@returns:
 				A ResultSet containing the userName and all roles assigned to her.
 	*/
+
+	public boolean removeUser(String username)
+	{
+		MySQLCompleteConnectorPrivileged myDBConn2 = new MySQLCompleteConnectorPrivileged();
+		
+		//Open the connection to the database
+		myDBConn2.doConnection();
+		boolean res;
+		String table, where, hashingValue;
+		table="userinformation";
+		where="username='" + username + "'";
+		res=myDBConn2.doDelete(table, where);
+		System.out.println("Deletion result: " + res);
+		return res;
+	}
+
+	public ResultSet listPagesAllowedForUser(String username) {
+		String tables = "rolesforuser, roles, roleforwebpage, webpages";
+		String fields = "webpages.page, webpages.page";
+		String whereClause = "rolesforuser.ID=roles.roleID and roles.roleID=roleforwebpage.roleID and roleforwebpage.pageID=webpages.pageID";
+		whereClause += " and userName='" + username + "' order by webpages.page";
+
+		String query = "SELECT " + fields + " FROM " + tables + " WHERE " + whereClause;
+
+		return myDBConn.doPageSelect(query);
+	}
+
+	public void uploadPicture(InputStream fileContent, String fileName) throws ServletException, IOException {
+		// Receive file uploaded to the Servlet from the HTML5 form
+		File file = new File("C:\\apache-tomcat-8.5.85\\webapps\\ROOT\\cpen410\\images\\regularusers" + fileName);
+		try (FileOutputStream out = new FileOutputStream(file)) {
+			// Write the uploaded file to the file system
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+			while ((bytesRead = fileContent.read(buffer)) != -1) {
+				out.write(buffer, 0, bytesRead);
+			}
+		} catch (IOException e) {
+			throw new ServletException("Error saving uploaded file", e);
+		}
+	}
+	
+
 	public ResultSet authenticate(String username, String password)
 	{
 		
@@ -74,10 +128,10 @@ public class applicationDBAuthenticationGoodComplete{
 		String fields, tables, whereClause, orderBy;
 		
 		//Define the table where the selection is performed
-		tables="roleusergood, role, rolewebpagegood, menuElement,webpagegood ";
+		tables="rolesforuser, roles, rolesforwebpage, webpages";
 		//Define the list fields list to retrieve assigned roles to the user
 		fields ="rolewebpagegood.pageURL, menuElement.title, webpagegood.pageTitle";
-		whereClause=" roleusergood.roleID=role.roleID and role.roleID=rolewebpagegood.roleId and menuElement.menuID = webpagegood.menuID";
+		whereClause=" rolesforuser.ID=role.roleID and role.roleID=rolewebpagegood.roleId and menuElement.menuID = webpagegood.menuID";
 		whereClause+=" and rolewebpagegood.pageURL=webpagegood.pageURL";
 		whereClause+=" and userName='"+ userName+"' order by menuElement.title, webpagegood.pageTitle;";
 		
@@ -112,20 +166,20 @@ public class applicationDBAuthenticationGoodComplete{
 		
 	}
 	
-	public boolean addUser(String userName, String completeName, String userPass, String userTelephone, String dateOfBirth, String gender, String userEmail, String street, String town, String state, String country, String degree, String school)
+	public boolean addUser(String username, String completeName, String userpass, String userTelephone, String dateOfBirth, String gender, String userEmail, String street, String town, String state, String country, String degree, String school)
 	{
 		boolean res = false;
 		String userTable = "UserInformation";
 		String addressTable = "AddressInformation";
-		String hashingValue = hashingSha256(userName + userPass);
+		String hashingValue = hashingSha256(username + userpass);
 
-		String userValues = "'" + userName + "', '" + hashingValue + "', '" + completeName + "', '" + userTelephone + "', '" + dateOfBirth + "', '" + gender + "', '" + userEmail + "'";
+		String userValues = "'" + username + "', '" + hashingValue + "', '" + completeName + "', '" + userTelephone + "', '" + dateOfBirth + "', '" + gender + "', '" + userEmail + "'";
 		res = myDBConn.doInsert(userTable, userValues);
-		String addressValues = "'" + userName + "', '" + degree + "', '" + school + "', '" + street + "', '" + town + "', '" + state + "', '" + country + "'";
+		String addressValues = "'" + username + "', '" + degree + "', '" + school + "', '" + street + "', '" + town + "', '" + state + "', '" + country + "'";
 		res &= myDBConn.doInsert(addressTable, addressValues);
 
 		// Special insert to add automatic roles. Add userRole and change manually if needed.
-		String query = "INSERT INTO RolesForUser (username, roleID) VALUES ('" + userName + "', 2);";
+		String query = "INSERT INTO RolesForUser (username, roleID) VALUES ('" + username + "', 2);";
 		res &= myDBConn.doRoleInsert(query);
 		
 		System.out.println("Insertion result: " + res);

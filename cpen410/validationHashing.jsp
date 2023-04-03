@@ -44,7 +44,7 @@
 				
 				//redirect to the welcome page
 				//response.sendRedirect("welcome.jsp");
-				response.sendRedirect("homePage.html");
+				response.sendRedirect("homePage.jsp");
 				
 			}else{
 				//Close any session associated with the user
