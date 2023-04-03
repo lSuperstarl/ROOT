@@ -84,7 +84,7 @@ public class MySQLCompleteConnectorPrivileged{
 	public boolean doDelete(String table, String where)
 	{
 		boolean res=false;
-		String queryString ="DELETE FROM "+ table + " where " + where + ";";
+		String queryString ="DELETE FROM "+ table + " WHERE " + where + ";";
 		System.out.println(queryString);
 		//try to insert a record to the selected table
 		try{
@@ -106,7 +106,7 @@ public class MySQLCompleteConnectorPrivileged{
 	{	
 		System.out.println("TEsting");
 		//Create a MySQLConnector
-		MySQLConnector conn = new MySQLConnector();
+		MySQLCompleteConnector conn = new MySQLCompleteConnector();
 		//Declare tthe fiels, tables and whereClause string objects
 		String fields, tables, whereClause;
 		//Define the projected fields

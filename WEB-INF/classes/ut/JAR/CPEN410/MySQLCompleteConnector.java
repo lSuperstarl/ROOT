@@ -296,7 +296,7 @@ public class MySQLCompleteConnector{
 	{	
 		System.out.println("TEsting");
 		//Create a MySQLConnector
-		MySQLConnector conn = new MySQLConnector();
+		MySQLCompleteConnector conn = new MySQLCompleteConnector();
 		//Declare tthe fiels, tables and whereClause string objects
 		String fields, tables, whereClause;
 		//Define the projected fields

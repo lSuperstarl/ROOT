@@ -58,10 +58,21 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		//Open the connection to the database
 		myDBConn2.doConnection();
 		boolean res;
-		String table, where, hashingValue;
-		table="userinformation";
-		where="username='" + username + "'";
-		res=myDBConn2.doDelete(table, where);
+		String addressinformation, userinformation, rolesforuser, where;
+		
+		addressinformation="addressinformation";
+		where="addressinformation.username='" + username + "'";
+		res=myDBConn2.doDelete(addressinformation, where);
+
+		rolesforuser="rolesforuser";
+		where="rolesforuser.username='" + username + "'";
+		res=myDBConn2.doDelete(rolesforuser, where);
+
+
+		userinformation="userinformation";
+		where="userinformation.username='" + username + "'";
+		res=myDBConn2.doDelete(userinformation, where);
+
 		System.out.println("Deletion result: " + res);
 		return res;
 	}

@@ -13,7 +13,7 @@ import java.sql.* ;
 public class applicationDBManager{
 
 	//myDBConn is an MySQLConnector object for accessing to the database
-	private MySQLConnector myDBConn;
+	private MySQLCompleteConnector myDBConn;
 	
 	/********
 		Default constructor
@@ -23,7 +23,7 @@ public class applicationDBManager{
 	*/
 	public applicationDBManager(){
 		//Create the MySQLConnector object
-		myDBConn = new MySQLConnector();
+		myDBConn = new MySQLCompleteConnector();
 		
 		//Open the connection to the database
 		myDBConn.doConnection();
