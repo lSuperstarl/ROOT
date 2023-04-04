@@ -5,24 +5,37 @@
 <html>
 <title>Mini-Facebook</title>
 <%
-        String username = (String)session.getAttribute("username");
+    applicationDBAuthenticationGoodComplete myAPPdb = new applicationDBAuthenticationGoodComplete();
+    String username = (String)session.getAttribute("username");
+    ResultSet imageResultSet = myAPPdb.getProfilePicture(username);
+    String image = "";
+    while (imageResultSet.next()) {
+        image = imageResultSet.getString(1);
+    }
+    System.out.println(image);
 %> 
 <p>
-    Hello <%= username %>!
+    Hello <%= username %>! <br>
+    <img src="/cpen410/images/regularusers/<%= image %>" width="100" height="80">
 </p>
 
 <head>
 </head>
+
 <body>
     <div align="center"><h1>Welcome to Mini-Facebook</h1></div>
+    <div align="left"><h1>Menu:</h1></div>
+
     <%
-        applicationDBAuthenticationGoodComplete myAPPdb = new applicationDBAuthenticationGoodComplete();
         ResultSet pagesList = myAPPdb.listPagesAllowedForUser(username);
+        System.out.println("Listing Pages for User...");
+        
         while (pagesList.next()) {
             String page1 = pagesList.getString(2);
-            %> <div align="left"><a href="<%= page1 %>"><%= page1 %></a></div>
+            System.out.println("Page loaded: " + page1);
+            %> <div id="pages" align="left"><a href="<%= page1 %>"><%= page1 %></a></div>
             <%
-        }
+        } 
     %>
 </body>
 </html>

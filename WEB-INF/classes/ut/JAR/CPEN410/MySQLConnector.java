@@ -7,10 +7,10 @@ import java.sql.* ;
 /******
 	This class manage a connection to the Department database and it should not be accessed from the front End. 
 */
-public class MySQLCompleteConnector{
+public class MySQLConnector{
 
 	//Database credential <jdbc:<protocol>://<hostName>/<databaseName>>
-	private String DB_URL="jdbc:mysql://localhost/social_network";
+	private String DB_URL="jdbc:mysql://localhost/cpen410";
 	
 	//Database authorized user information
 	private String USER="student";
@@ -27,7 +27,7 @@ public class MySQLCompleteConnector{
 		@parameters:
 		
 	*/
-	public MySQLCompleteConnector()
+	public MySQLConnector()
 	{
 		//define connections ojects null
 		conn = null;
@@ -42,8 +42,8 @@ public class MySQLCompleteConnector{
 	public void doConnection(){
 		try{
 		  //Register JDBC the driver
-		  Class.forName("com.mysql.jdbc.Driver").newInstance();
-
+		//Class.forName("com.mysql.jdbc.Driver").newInstance();
+		Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 								   
 		  System.out.println("Connecting to database...");
 		   //Open a connection using the database credentials
@@ -51,7 +51,7 @@ public class MySQLCompleteConnector{
 		  
 		  System.out.println("Creating statement...");
 		  //Create an Statement object for performing queries and transations
-		  stmt = conn.createStatement();
+		  stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		  System.out.println("Statement Ok...");
 		} catch(SQLException sqlex){
 			sqlex.printStackTrace();
@@ -95,7 +95,7 @@ public class MySQLCompleteConnector{
 		ResultSet result=null;
 		
 		//Create the selection statement 
-		String selectionStatement = "Select " + fields+ " from " + tables + " " + where + " ;";
+		String selectionStatement = "Select " + fields+ " from " + tables + " where " + where + " ;";
 		System.out.println(selectionStatement);
 		
 		try{
@@ -169,157 +169,8 @@ public class MySQLCompleteConnector{
 			return result;
 		}
 	}
-
-	public ResultSet doPageSelect(String query){
-		//Create a ResulSet
-		ResultSet result=null;
-		
-		try{
-			//perform the query and catch results in the result object
-			result = stmt.executeQuery(query);
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		finally{
-			//return results
-			return result;
-		}
-	}
 	
-	/***********
-		doInsertion method
-			This method performs an insertion to the database
-			@parameters:
-				values: values to be inserted 
-				table: table to be updated
-				
-			@returns:
-				boolean value: true: the insertion was ok, an error was generated
-	*/
 	
-	public boolean doInsert(String table, String values)
-	{
-		boolean res=false;
-		String charString ="INSERT INTO "+ table + " values (" + values +");";
-		System.out.println(charString);
-		//try to insert a record to the selected table
-		try{
-			 res=stmt.execute(charString);
-			 System.out.println("MySQLCompleteConnector insertion: " + res);
-			 
-		}
-		catch(Exception e)
-		{
-			
-			e.printStackTrace();
-		}
-		finally{
-			
-		}
-			return res;
-	}
-
-	public boolean doInsertPicture(String query)
-	{
-		boolean res=false;
-		System.out.println(query);
-		//try to insert a record to the selected table
-		try{
-			 res = stmt.execute(query);
-			 System.out.println("MySQLCompleteConnector insertion: " + res);
-			 
-		}
-		catch(Exception e)
-		{
-			
-			e.printStackTrace();
-		}
-		finally{
-			
-		}
-			return res;
-	}
-
-	public boolean doDelete(String table, String where)
-	{
-		boolean res=false;
-		String queryString ="DELETE FROM "+ table + " where " + where + ";";
-		System.out.println(queryString);
-		//try to insert a record to the selected table
-		try{
-			 res=stmt.execute(queryString);
-			 System.out.println("MySQLCompleteConnector insertion: " + res);
-			 
-		}
-		catch(Exception e)
-		{
-			
-			e.printStackTrace();
-		}
-		finally{
-			
-		}
-			return res;
-	}
-
-	public boolean doRoleInsert(String query)
-	{
-		boolean res=false;
-		String charString = query;
-		System.out.println(charString);
-		//try to insert a record to the selected table
-		try{
-			 res=stmt.execute(charString);
-			 System.out.println("MySQLCompleteConnector insertion: " + res);
-			 
-		}
-		catch(Exception e)
-		{
-			
-			e.printStackTrace();
-		}
-		finally{
-			
-		}
-			return res;
-	}
-
-	public ResultSet doGetProfilePicture(String query) {
-		//Create a ResulSet
-		ResultSet result=null;
-		
-		try{
-			//perform the query and catch results in the result object
-			result = stmt.executeQuery(query);
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		finally{
-			//return results
-			return result;
-		}
-	}
-
-	public ResultSet doSelect(){
-		
-		//Create a ResulSet
-		ResultSet result=null;
-		
-		//Create the selection statement 
-		String selectionStatement = null;
-		
-		try{
-			//perform the query and catch results in the result object
-			result = stmt.executeQuery(selectionStatement);
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		finally{
-			//return results
-			return result;
-		}
-	}
-
 	/***********
 		Debugging method
 			This method creates an applicationDBManager object, retrieves all departments in the database, and close the connection to the database
@@ -331,7 +182,7 @@ public class MySQLCompleteConnector{
 	{	
 		System.out.println("TEsting");
 		//Create a MySQLConnector
-		MySQLCompleteConnector conn = new MySQLCompleteConnector();
+		MySQLConnector conn = new MySQLConnector();
 		//Declare tthe fiels, tables and whereClause string objects
 		String fields, tables, whereClause;
 		//Define the projected fields
@@ -339,7 +190,7 @@ public class MySQLCompleteConnector{
 		//Define the selected tables
 		tables="department";
 		//Establish the where clause
-		whereClause="budget>1000";		
+		whereClause="budget > 1000";		
 		
 			
 		try{
@@ -354,6 +205,7 @@ public class MySQLCompleteConnector{
 			while (res.next())
 			{
 				count++;
+				System.out.println(res.getString(1));
 				
 			}
 			//Print the results count

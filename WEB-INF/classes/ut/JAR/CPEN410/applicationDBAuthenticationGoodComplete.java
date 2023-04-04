@@ -78,31 +78,84 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 	}
 
 	public ResultSet listPagesAllowedForUser(String username) {
+		MySQLCompleteConnectorPrivileged myDBConn2 = new MySQLCompleteConnectorPrivileged();
+		// Open the connection to the database
+		myDBConn2.doConnection();
+		
 		String tables = "rolesforuser, roles, roleforwebpage, webpages";
-		String fields = "webpages.page, webpages.page";
+		String fields = "webpages.page";
 		String whereClause = "rolesforuser.ID=roles.roleID and roles.roleID=roleforwebpage.roleID and roleforwebpage.pageID=webpages.pageID";
-		whereClause += " and userName='" + username + "' order by webpages.page";
+		whereClause += " and userName='" + username + "';";
 
 		String query = "SELECT " + fields + " FROM " + tables + " WHERE " + whereClause;
 
-		return myDBConn.doPageSelect(query);
-	}
-
-	public void uploadPicture(InputStream fileContent, String fileName) throws ServletException, IOException {
-		// Receive file uploaded to the Servlet from the HTML5 form
-		File file = new File("C:\\apache-tomcat-8.5.85\\webapps\\ROOT\\cpen410\\images\\regularusers" + fileName);
-		try (FileOutputStream out = new FileOutputStream(file)) {
-			// Write the uploaded file to the file system
-			byte[] buffer = new byte[1024];
-			int bytesRead;
-			while ((bytesRead = fileContent.read(buffer)) != -1) {
-				out.write(buffer, 0, bytesRead);
-			}
-		} catch (IOException e) {
-			throw new ServletException("Error saving uploaded file", e);
-		}
+		return myDBConn2.doPageSelect(query);
 	}
 	
+	public void setProfilePicture(String file, String username) {
+		String sql = "INSERT INTO picturesForUser (PicturePath, UserName) VALUES (" + file + ", '" + username + "');";
+		myDBConn.doInsertPicture(sql);
+	}
+
+	public ResultSet getProfilePicture(String username) {
+		String query = "SELECT PicturePath from picturesForUser WHERE username = '" + username + "';";
+
+		return myDBConn.doGetProfilePicture(query);
+	}
+
+	public boolean modifyUser(String username, String newCompleteName, String newUserTelephone, String newUserEmail, String newStreet, String newTown, String newState, String newCountry, String newDegree, String newSchool) {
+		String setClause = " SET ";
+
+		MySQLCompleteConnectorPrivileged myDBConn2 = new MySQLCompleteConnectorPrivileged();
+		// Open the connection to the database
+		myDBConn2.doConnection();
+	
+		boolean res;
+
+		if (newCompleteName != null && !newCompleteName.isEmpty()) {
+			setClause += "Name = '" + newCompleteName + "', ";
+		}
+		if (newUserTelephone != null && !newUserTelephone.isEmpty()) {
+			setClause += "Telephone = '" + newUserTelephone + "', ";
+		}
+		if (newUserEmail != null && !newUserEmail.isEmpty()) {
+			setClause += "Email = '" + newUserEmail + "', ";
+		}
+		if (newDegree != null && !newDegree.isEmpty()) {
+			setClause += "Degree = '" + newDegree + "', ";
+		}
+		if (newSchool != null && !newSchool.isEmpty()) {
+			setClause += "School = '" + newSchool + "', ";
+		}
+		if (newStreet != null && !newStreet.isEmpty()) {
+			setClause += "a.Street = '" + newStreet + "', ";
+		}
+		if (newTown != null && !newTown.isEmpty()) {
+			setClause += "a.Town = '" + newTown + "', ";
+		}
+		if (newState != null && !newState.isEmpty()) {
+			setClause += "a.State = '" + newState + "', ";
+		}
+		if (newCountry != null && !newCountry.isEmpty()) {
+			setClause += "a.Country = '" + newCountry + "', ";
+		}
+
+		// Remove trailing ", "
+		if (!setClause.equals("SET ")) {
+			setClause = setClause.substring(0, setClause.length() - 2);
+		}
+
+		String whereClause = "WHERE u.UserName = '" + username + "'";
+
+		System.out.println("Modifying Username: " + username);
+		System.out.println("Where clause: " + whereClause);
+		System.out.println("Set clause: " + setClause);
+
+		String tables = "userinformation u JOIN addressinformation a ON u.UserName = a.UserName";
+		res = myDBConn2.doUpdate(tables, username, setClause, whereClause);
+
+		return res;
+	}
 
 	public ResultSet authenticate(String username, String password)
 	{

@@ -13,7 +13,7 @@ public class MySQLCompleteConnectorPrivileged{
 	private String DB_URL="jdbc:mysql://localhost/social_network";
 	
 	//Database authorized user information
-	private String USER="deleterUser";
+	private String USER="social_network_admin";
 	private String PASS="password";
    
    //Connection objects
@@ -81,6 +81,21 @@ public class MySQLCompleteConnectorPrivileged{
 		}
 	}
 
+    public boolean doUpdate(String tableName, String userName, String setClause, String whereClause) {
+        boolean result = false;
+        try {
+
+            String sql = "UPDATE " + tableName + setClause + " " + whereClause + ";";
+            System.out.println(sql);
+            result =stmt.execute(sql);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+
 	public boolean doDelete(String table, String where)
 	{
 		boolean res=false;
@@ -102,6 +117,23 @@ public class MySQLCompleteConnectorPrivileged{
 		}
 			return res;
 	}
+
+	public ResultSet doPageSelect(String query){
+		//Create a ResulSet
+		ResultSet result=null;
+		System.out.println(query);
+		try{
+			//perform the query and catch results in the result object
+			result = stmt.executeQuery(query);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			//return results
+			return result;
+		}
+	}
+
 	public static void main(String[] args)
 	{	
 		System.out.println("TEsting");

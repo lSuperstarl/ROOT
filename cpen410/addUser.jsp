@@ -40,12 +40,12 @@
 			
 			<%//Verify if the user has been authenticated
 			if (res){%>
-				USer added
+				
 			<%}else{
 				//Close any session associated with the user
-				session.setAttribute("userName", null);
+				session.setAttribute("userName", userName);
+				response.sendRedirect("uploader.html");
 				%>
-				Cannot be added <br>
 			<%}
 				
 				//Close the connection to the database

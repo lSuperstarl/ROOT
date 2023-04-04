@@ -16,11 +16,9 @@ Required values:
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import ut.JAR.CPEN410.*;
-import java.sql.*;
 
 // Extend HttpServlet class
-public class sessionServlet extends HttpServlet {
+public class authenticateApplicationDummy extends HttpServlet {
  
    private String message;
    private String title;
@@ -47,7 +45,7 @@ public class sessionServlet extends HttpServlet {
       PrintWriter out = response.getWriter();
       
 	  // Send the response
-	  out.println("This servlet does not support authentication via GET method!" + request.getSession().toString());
+	  out.println("This servlet does not support authentication via GET method!");
 	 }
 /*****
 
@@ -68,7 +66,7 @@ public class sessionServlet extends HttpServlet {
       PrintWriter out = response.getWriter();
      
       //Perform the actual authentication process
-	  String msg = doAuthentication(userName, passwd, request);
+	  String msg = doAuthentication(userName, passwd);
 	  
 	  //Send the final response to the requester
 	  out.println(msg);
@@ -78,31 +76,26 @@ public class sessionServlet extends HttpServlet {
 	/****
 		This method perform a dummy authentication process
 	***/
-   public String doAuthentication(String userName, String userPass, HttpServletRequest request)
+   public String doAuthentication(String userName, String passwd)
    {
-		String authenticationString = userName+userPass;
-		String msg="not";
+		String authenticationString = userName+passwd;
+		String msg;
 		
-		try{
-			//Create the appDBMnger object
-			applicationDBAuthenticationGood appDBAuth = new applicationDBAuthenticationGood();
-			System.out.println("Connecting...");
-			System.out.println(appDBAuth.toString());
-			
-			//Authenticate the user
-			ResultSet res=appDBAuth.authenticate(userName, userPass);
 		
-			//Check for authentication result
-			if (res.next()){
-			  msg=request.getSession().toString();
-			}
-		} catch(Exception ex){
-			
-		}
-		finally{		
-			//Return the actual message
-			return msg;
-		}
+		 if (authenticationString.compareTo("userpass")==0){
+		  //You got authenticated
+		  //then, generate the JSON object
+		  msg="{\"userName\"=\"user\", \n";
+		  msg+="\"name\"=\"Dummy Name\", \n";
+		  msg+="\"email\"=\"dummy@dummy.com\", \n";
+		  msg+="\"id\"=\"12345\" \n}";
+		  }
+		else{
+		msg="not";	  
+		  }
+		  
+		//Return the actual message
+		return msg;
    }
 
 
