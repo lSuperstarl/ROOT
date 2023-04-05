@@ -51,32 +51,12 @@
 					
 					%>
 					Welcome! <%=userActualName%>
-					<table>
-					<%
-					//draw the menu
-					ResultSet menuRes = appDBAuth.menuElements(userName);
-					String currentMenu="";
-					while(menuRes.next()){
-						//Check to create a new menu element
-						if (currentMenu.compareTo(menuRes.getString(2))!=0){ 
-							//A new element
-						    currentMenu = menuRes.getString(2);
-						%> <tr><td><%=currentMenu%> <td></tr>
-						<%}
-							//print the page title and establish a hyperlink
-						%>
-						<tr><td>-</td><td><a href="<%=menuRes.getString(1)%>"><%=menuRes.getString(3)%></a>
-						
-					<%} //Close the table %>
-					</table>
-					<%
-					
 				}else{
 					//Close any session associated with the user
 					session.setAttribute("userName", null);
 					
 					//return to the login page
-					response.sendRedirect("loginHashing.html");
+					response.sendRedirect("login.html");
 					}
 					res.close();
 					//Close the connection to the database
@@ -86,7 +66,7 @@
 				{%>
 					Nothing to show!
 					<%e.printStackTrace();
-					response.sendRedirect("loginHashing.html");
+					response.sendRedirect("login.html");
 				}finally{
 					System.out.println("Finally");
 				}

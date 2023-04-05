@@ -86,7 +86,7 @@ public class MySQLCompleteConnectorPrivileged{
         try {
 
             String sql = "UPDATE " + tableName + setClause + " " + whereClause + ";";
-            System.out.println(sql);
+
             result =stmt.execute(sql);
 
         } catch (SQLException e) {
@@ -100,7 +100,7 @@ public class MySQLCompleteConnectorPrivileged{
 	{
 		boolean res=false;
 		String queryString ="DELETE FROM "+ table + " WHERE " + where + ";";
-		System.out.println(queryString);
+
 		//try to insert a record to the selected table
 		try{
 			 res=stmt.execute(queryString);

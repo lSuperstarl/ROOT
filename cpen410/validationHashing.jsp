@@ -28,18 +28,16 @@
 			
 			<%//Verify if the user has been authenticated
 			if (res.next()){
-				
-				
 				//Create the current page attribute
 				session.setAttribute("currentPage", "validationHashing.jsp");
 				
 				//Create a session variable
-				if (session.getAttribute("username")==null ){
+				if (session.getAttribute("userName") == null ){
 					//create the session variable
-					session.setAttribute("username", username);
-				} else{
+					session.setAttribute("userName", username);
+				} else {
 					//Update the session variable
-					session.setAttribute("username", username);
+					session.setAttribute("userName", username);
 				}
 				
 				//redirect to the welcome page
@@ -48,7 +46,7 @@
 				
 			}else{
 				//Close any session associated with the user
-				session.setAttribute("username", null);
+				session.setAttribute("userName", null);
 				
 				//return to the login page
 				response.sendRedirect("login.html");
@@ -58,7 +56,10 @@
 				appDBAuth.close();
 			
 			} catch(Exception e)
-			{%>
+			{
+				System.out.println("In catch");
+				%>
+				
 				Nothing to show!
 				<%e.printStackTrace();
 				response.sendRedirect("login.html");
@@ -66,7 +67,7 @@
 				System.out.println("Finally");
 			}
 			%>		
-		sessionName=<%=session.getAttribute("username")%>
+		sessionName=<%=session.getAttribute("userName")%>
 		
 		
 	</body>

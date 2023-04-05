@@ -81,15 +81,10 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		MySQLCompleteConnectorPrivileged myDBConn2 = new MySQLCompleteConnectorPrivileged();
 		// Open the connection to the database
 		myDBConn2.doConnection();
-		
-		String tables = "rolesforuser, roles, roleforwebpage, webpages";
-		String fields = "webpages.page";
-		String whereClause = "rolesforuser.ID=roles.roleID and roles.roleID=roleforwebpage.roleID and roleforwebpage.pageID=webpages.pageID";
-		whereClause += " and userName='" + username + "';";
 
-		String query = "SELECT " + fields + " FROM " + tables + " WHERE " + whereClause;
+		String query = "SELECT wp.Page, wp.Description FROM webPages wp INNER JOIN roleForWebPage rfw ON rfw.Page = wp.Page INNER JOIN RolesForUser rfu ON rfu.roleID = rfw.RoleID INNER JOIN UserInformation ui ON ui.UserName = rfu.UserName WHERE ui.UserName = '" + username + "';";
 
-		return myDBConn2.doPageSelect(query);
+		return myDBConn.doPageSelect(query);
 	}
 	
 	public void setProfilePicture(String file, String username) {
@@ -146,11 +141,7 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		}
 
 		String whereClause = "WHERE u.UserName = '" + username + "'";
-
-		System.out.println("Modifying Username: " + username);
-		System.out.println("Where clause: " + whereClause);
-		System.out.println("Set clause: " + setClause);
-
+		
 		String tables = "userinformation u JOIN addressinformation a ON u.UserName = a.UserName";
 		res = myDBConn2.doUpdate(tables, username, setClause, whereClause);
 
@@ -168,7 +159,7 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		//Define the list fields list to retrieve assigned roles to the user
 		fields ="userinformation.username , rolesforuser.Id, userinformation.Name";
 		hashingVal = hashingSha256(username + password);
-		whereClause="where userinformation.username = rolesforuser.UserName and userinformation.username='" + username +"' and passwordhash='" + hashingVal + "'";
+		whereClause="userinformation.username = rolesforuser.UserName and userinformation.username='" + username +"' and passwordhash='" + hashingVal + "'";
 		
 		
 		System.out.println("User: " + username + " Has logged In!");
@@ -210,23 +201,23 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 	{
 		
 		//Declare function variables
-		String fields, tables, whereClause, hashingVal;
+		String fields, tables, whereClause, hashingVal, query;
 		
-		//Define the table where the selection is performed
-		tables="roleusergood, role, rolewebpagegood, webpagegood, usergood, webpageprevious";
-		//Define the list fields list to retrieve assigned roles to the user
-		fields ="usergood.userName, roleusergood.roleId, usergood.Name ";
-		whereClause=" usergood.userName = roleusergood.userName and usergood.userName='" +userName +"' and role.roleId=roleusergood.roleId and ";
-		whereClause+=" rolewebpagegood.roleId=role.roleId and rolewebpagegood.pageURL=webpagegood.pageURL and webpagegood.pageURL='" +currentPage+"' and ";
-		whereClause+=" webpageprevious.previousPageURL='"+previousPage+"'webpagegood.pageURL = webpageprevious.currentpageURL'";
-		whereClause+=" webpage";
-		
+		// Define the list of tables
+		tables = "RolesForUser, Roles, roleForWebPage, webPages, UserInformation, webPageFlow";
+
+		// Define the list of fields to retrieve assigned roles to the user
+		fields = "UserInformation.UserName, Roles.roleID, UserInformation.Name";
+
+		// Define the where clause to filter the results
+		whereClause = "UserInformation.UserName = RolesForUser.UserName AND UserInformation.UserName = '" + userName + "' AND Roles.roleID = RolesForUser.roleID AND ";
+		whereClause += "roleForWebPage.RoleID = Roles.roleID AND roleForWebPage.Page = webPages.Page AND webPages.Page = '" + currentPage + "' AND ";
+		whereClause += "webPageFlow.previousPage = '" + previousPage + "' AND webPageFlow.currentPage = webPages.Page";
 		
 		System.out.println("listing...");
 		
 		//Return the ResultSet containing all roles assigned to the user
 		return myDBConn.doSelect(fields, tables, whereClause);
-		
 		
 	}
 	

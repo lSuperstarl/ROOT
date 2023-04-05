@@ -95,7 +95,7 @@ public class MySQLCompleteConnector{
 		ResultSet result=null;
 		
 		//Create the selection statement 
-		String selectionStatement = "Select " + fields+ " from " + tables + " " + where + " ;";
+		String selectionStatement = "Select " + fields+ " FROM " + tables + " WHERE " + where + " ;";
 		System.out.println(selectionStatement);
 		
 		try{
@@ -173,7 +173,7 @@ public class MySQLCompleteConnector{
 	public ResultSet doPageSelect(String query){
 		//Create a ResulSet
 		ResultSet result=null;
-		
+		System.out.println(query);
 		try{
 			//perform the query and catch results in the result object
 			result = stmt.executeQuery(query);
