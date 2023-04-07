@@ -37,11 +37,10 @@
 			
 			<%//Verify if the user has been authenticated
 			if (res){%>
-				
+				response.sendRedirect("homePage.jsp");
 			<%}else{
 				//Close any session associated with the user
-				session.setAttribute("userName", null);
-				response.sendRedirect("login.html");
+				response.sendRedirect("homePage.jsp");
 				%>
 			<%}
 				
@@ -57,7 +56,5 @@
 			}
 			%>		
 		sessionName=<%=session.getAttribute("userName")%>
-		
-		
 	</body>
 </html>

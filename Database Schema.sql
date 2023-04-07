@@ -1,3 +1,5 @@
+CREATE DATABASE "social_network";
+
 CREATE TABLE UserInformation (
   UserName VARCHAR(20) PRIMARY KEY,
   PasswordHash MEDIUMTEXT NOT NULL,
@@ -71,6 +73,9 @@ CREATE TABLE picturesForUser (
 	UserName VARCHAR(50) NOT NULL,
 	FOREIGN KEY (UserName) REFERENCES UserInformation(UserName)
 );
+INSERT INTO Roles (roleName, description) VALUES ('adminRole', 'A role for administrators');
+INSERT INTO Roles (roleName, description) VALUES ('userRole', 'A role for regular users');
+INSERT INTO Roles (roleName, description) VALUES ('techRole', 'A role for service technicians or tech support');
 
 Insert into menuElement values (1, "Users", "User management");
 Insert into menuElement values (2, "General", "General operations");
@@ -78,87 +83,40 @@ Insert into menuElement values (0, "General pages", "General pages");
 
 INSERT INTO webPages (Page, Description, menuID) VALUES ("validationHashing.jsp", "The validation page", 0); 
 INSERT INTO webPages (Page, Description, menuID) VALUES ("addUser.jsp", "This page adds users to the system", 1); 
-INSERT INTO webPages (Page, Description, menuID) VALUES ("searchUser.jsp", "This page searches for users in the database", 2);
-INSERT INTO webPages (Page, Description, menuID) VALUES ("signout.jsp", "The logout page", 2);
-INSERT INTO webPages (Page, Description, menuID) VALUES ("uploadProfilePicture.jsp", "User page to upload profile picture upon registration", 1);
+INSERT INTO webPages (Page, Description, menuID) VALUES ("removeUser.jsp", "This page removes users from the system", 1); 
+INSERT INTO webPages (Page, Description, menuID) VALUES ("searchUser.jsp", "This page searches for users in the database", 1); 
+INSERT INTO webPages (Page, Description, menuID) VALUES ("uploadProfilePicture.html", "User page to upload profile picture upon registration", 1);
+INSERT INTO webPages (Page, Description, menuID) VALUES ("login.html", "The login page");
+INSERT INTO webPages (Page, Description, menuID) VALUES ("searchUser.html", "The search user page", 2);
+INSERT INTO webPages (Page, Description, menuID) VALUES ("signup.html", "The signup page");
+INSERT INTO webPages (Page, Description, menuID) VALUES ("signout.jsp", "The logout page");
+INSERT INTO webPages (Page, Description, menuID) VALUES ("homePage.html", "The home page");
+INSERT INTO webPages (Page, Description, menuID) VALUES ("adminAddUser.html", "Administrator Page to Add User", 1);
+INSERT INTO webPages (Page, Description, menuID) VALUES ("modifyUser.html", "This page adds users to the system", 1); 
+INSERT INTO webPages (Page, Description, menuID) VALUES ("editProfile.html", "Edit user Profile", 1);
 
-INSERT INTO Roles (roleName, description) VALUES ('adminRole', 'A role for administrators');
-INSERT INTO Roles (roleName, description) VALUES ('userRole', 'A role for regular users');
-INSERT INTO Roles (roleName, description) VALUES ('techRole', 'A role for service technicians or tech support');
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "removeUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "modifyUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "searchUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "searchUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "uploadProfilePicture.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "adminAddUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "editProfile.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (2, "editProfile.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (2, "signout.jsp");
+INSERT INTO roleForWebPage (roleID, page) VALUES (2, "uploadProfilePicture.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (2, "searchUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (3, "editProfile.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (3, "signout.jsp");
+INSERT INTO roleForWebPage (roleID, page) VALUES (3, "adminAddUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (3, "uploadProfilePicture.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (3, "searchUser.html");
 
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 1);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 2);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 4);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 5);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 6);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 7);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 8);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 9);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 10);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (3, 12);
-
-
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (2, 1);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (2, 2);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (2, 4);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (2, 7);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (2, 8);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (2, 11);
-
-
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 1);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 2);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 3);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 4);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 5);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 6);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 7);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 8);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 9);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 10);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 11);
-INSERT INTO roleForWebPage (roleID, pageID) VALUES (1, 12);
-
-# Current
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('signup.html', 'homePage.jsp');
 INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('uploadProfilePicture.jsp', 'signUp.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('login.html', 'signUp.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('validationHashing.jsp', 'login.html');
 INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('homePage.jsp', 'validationHashing.jsp');
 INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('signout.jsp', 'homePage.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('searchUser.html', 'homePage.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('searchUser.jsp', 'searchUser.html');
-# Current
-
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('signUp.jsp', 'welcomePage.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('uploadProfilePicture.jsp', 'signUp.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('login.jsp', 'signUp.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('homePage.html', 'login.jsp');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('logOut.jsp', 'homePage.html');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('searchUser.html', 'homePage.html');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('searchUser.jsp', 'searchUser.html');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('userOperations.html', 'homePage.html');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('editProfile.jsp', 'homePage.html');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('removeUser.jsp', 'userOperations.html');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('addUser.jsp', 'userOperations.html');
-INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('modifyUser.jsp', 'userOperations.html');
-
-INSERT INTO webPages (Page, Description) VALUES ("validationHashing.jsp", "The validation page"); 
-INSERT INTO webPages (Page, Description) VALUES ("addUser.jsp", "This page adds users to the system"); 
-INSERT INTO webPages (Page, Description) VALUES ("searchUser.jsp", "This page searches for users in the database");
-INSERT INTO webPages (Page, Description) VALUES ("uploadProfilePicture.jsp", "User page to upload profile picture upon registration");
-INSERT INTO webPages (Page, Description) VALUES ("signout.jsp", "The logout page");
-
-INSERT INTO webPages (Page, Description) VALUES ("validationHashing.jsp", "The validation page"); 
-INSERT INTO webPages (Page, Description) VALUES ("addUser.jsp", "This page adds users to the system"); 
-INSERT INTO webPages (Page, Description) VALUES ("removeUser.jsp", "This page removes users from the system"); 
-INSERT INTO webPages (Page, Description) VALUES ("searchUser.jsp", "This page searches for users in the database"); 
-INSERT INTO webPages (Page, Description) VALUES ("listUser.jsp", "This page lists users in the system"); 
-INSERT INTO webPages (Page, Description) VALUES ("welcomeMenu.jsp", "The welcome page"); 
-INSERT INTO webPages (Page, Description) VALUES ("uploadProfilePicture.jsp", "User page to upload profile picture upon registration");
-INSERT INTO webPages (Page, Description) VALUES ("login.html", "The login page");
-INSERT INTO webPages (Page, Description) VALUES ("searchUser.html", "The search user page");
-INSERT INTO webPages (Page, Description) VALUES ("signup.html", "The signup page");
-INSERT INTO webPages (Page, Description) VALUES ("editProfile.jsp", "The edit profile page");
-INSERT INTO webPages (Page, Description) VALUES ("logout.jsp", "The logout page");
-INSERT INTO webPages (Page, Description) VALUES ("homePage.html", "The home page");
+INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('searchUser.jsp', 'homePage.jsp');
+INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('modifyUser.jsp', 'homePage.jsp');
+INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('removeUser.jsp', 'homePage.jsp');
+INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('addUser.jsp', 'homePage.jsp');
+INSERT INTO webPageFlow (currentPage, previousPage) VALUES ('editProfile.jsp', 'homePage.jsp'); 

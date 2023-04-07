@@ -95,7 +95,7 @@ public class MySQLCompleteConnector{
 		ResultSet result=null;
 		
 		//Create the selection statement 
-		String selectionStatement = "Select " + fields+ " FROM " + tables + " WHERE " + where + " ;";
+		String selectionStatement = "Select " + fields+ " from " + tables + " WHERE " + where + " ;";
 		System.out.println(selectionStatement);
 		
 		try{
@@ -109,6 +109,26 @@ public class MySQLCompleteConnector{
 			return result;
 		}
 	}
+
+	public ResultSet doFlowSelect(String query){
+		//Create a ResulSet
+		ResultSet result=null;
+		
+		//Create the selection statement 
+		String selectionStatement = query;
+		
+		try{
+			//perform the query and catch results in the result object
+			result = stmt.executeQuery(selectionStatement);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			//return results
+			return result;
+		}
+	}
+
 	/***********
 		doSelect method
 			This method performs a query to the database

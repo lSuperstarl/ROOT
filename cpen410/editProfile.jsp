@@ -10,19 +10,17 @@
 
 <%
 	//Retrieve variables
-	String userName = request.getParameter("userName");
-	String userPass = request.getParameter("userPass");
-	String completeName = request.getParameter("completeName");
-	String telephone = request.getParameter("userTelephone");
-	String dateOfBirth = request.getParameter("dateOfBirth");
-	String gender = request.getParameter("gender");
-	String userEmail = request.getParameter("userEmail");
-	String street = request.getParameter("street");
-	String town = request.getParameter("town");
-	String state = request.getParameter("state");
-	String country = request.getParameter("country");
-	String degree = request.getParameter("degree");
-	String school = request.getParameter("school");
+	String userName = session.getAttribute("userName").toString();
+	String newCompleteName = request.getParameter("completeName");
+	String newUserTelephone = request.getParameter("userTelephone");
+	String newUserEmail = request.getParameter("userEmail");
+	String newStreet = request.getParameter("street");
+	String newTown = request.getParameter("town");
+	String newState = request.getParameter("state");
+	String newCountry = request.getParameter("country");
+	String newDegree = request.getParameter("degree");
+	String newSchool = request.getParameter("school");
+    System.out.println(userName);
 	
 	
 	
@@ -34,19 +32,16 @@
 			System.out.println(appDBAuth.toString());
 			
 			//Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-			boolean res=appDBAuth.addUser(userName, completeName, userPass, telephone, dateOfBirth, gender, userEmail, street, town, state, country, degree, school);%>
+			boolean res=appDBAuth.modifyUser(userName, newCompleteName, newUserTelephone, newUserEmail, newStreet, newTown, newState, newCountry, newDegree, newSchool);%>
 		
 			
 			
 			<%//Verify if the user has been authenticated
 			if (res){%>
-				
+				response.sendRedirect("homePage.jsp");
 			<%}else{
-				%>
-				User added <br>
-				<%
-				session.setAttribute("userName", userName);
-				response.sendRedirect("uploadProfilePicture.html");
+				//Close any session associated with the user
+				response.sendRedirect("homePage.jsp");
 				%>
 			<%}
 				
@@ -62,7 +57,5 @@
 			}
 			%>		
 		sessionName=<%=session.getAttribute("userName")%>
-		
-		
 	</body>
 </html>

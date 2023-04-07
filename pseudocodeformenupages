@@ -12,6 +12,6 @@ Usuario entonces ve esas paginas en la pagina de homePage.jsp
 Usuario hace login
 Chequeamos si:
     Si el usuario de verdad esta logged in
-    El previous page y el current page (en este caso despues del login seria, validationHashing.jsp y homePage.jsp)
+    El previous page y el current page siguen el flow de la base de datos
     Si el flow no existe pero el usuario esta logged in, se hace redirection a homePage.jsp
     Si el flow no existe y el usuario no esta logged in, se hace redirection a login.html

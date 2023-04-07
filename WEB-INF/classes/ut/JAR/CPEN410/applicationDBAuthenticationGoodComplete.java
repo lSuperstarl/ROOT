@@ -92,6 +92,11 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		myDBConn.doInsertPicture(sql);
 	}
 
+	public void updateProfilePicture(String file, String username) {
+		String sql = "UPDATE picturesForUser SET PicturePath = '" + file + "' WHERE UserName = '" + username + "';";
+		myDBConn.doInsertPicture(sql);
+	}
+	
 	public ResultSet getProfilePicture(String username) {
 		String query = "SELECT PicturePath from picturesForUser WHERE username = '" + username + "';";
 
@@ -100,7 +105,7 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 
 	public boolean modifyUser(String username, String newCompleteName, String newUserTelephone, String newUserEmail, String newStreet, String newTown, String newState, String newCountry, String newDegree, String newSchool) {
 		String setClause = " SET ";
-
+		System.out.println(username);
 		MySQLCompleteConnectorPrivileged myDBConn2 = new MySQLCompleteConnectorPrivileged();
 		// Open the connection to the database
 		myDBConn2.doConnection();
@@ -214,10 +219,12 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		whereClause += "roleForWebPage.RoleID = Roles.roleID AND roleForWebPage.Page = webPages.Page AND webPages.Page = '" + currentPage + "' AND ";
 		whereClause += "webPageFlow.previousPage = '" + previousPage + "' AND webPageFlow.currentPage = webPages.Page";
 		
+		query = "SELECT webpageflow.currentpage, webpageflow.previouspage, userinformation.username FROM webpageflow, userinformation";
+
 		System.out.println("listing...");
 		
 		//Return the ResultSet containing all roles assigned to the user
-		return myDBConn.doSelect(fields, tables, whereClause);
+		return myDBConn.doFlowSelect(query);
 		
 	}
 	
@@ -290,7 +297,6 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		if (!whereClause.isEmpty()) {
 			// remove trailing "AND " from whereClause
 			whereClause = whereClause.substring(0, whereClause.length() - 5);
-			whereClause = "WHERE " + whereClause;
 		}
 	
 		System.out.println("listing search results...");

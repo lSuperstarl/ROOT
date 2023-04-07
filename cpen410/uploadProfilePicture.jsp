@@ -1,20 +1,41 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>File Upload Example in JSP and Servlet - Java web application</title>
-    </head>
- 
-    <body> 
-        <div>
-            <h3> Choose File to Upload in Server </h3>
-            <form action="upload" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" />
-                <input type="submit" value="upload" />
-            </form>          
-        </div>
-      
-    </body>
-</html>
+<%@ page import="java.io.*, ut.JAR.CPEN410.*, java.lang.*, java.util.*, org.apache.commons.fileupload.*, org.apache.commons.fileupload.disk.*, org.apache.commons.fileupload.servlet.*, org.apache.commons.io.FilenameUtils" %>
+
+<%
+    String destination = "C:\\apache-tomcat-8.5.85\\webapps\\ROOT\\cpen410\\images\\regularusers\\";
+
+    applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
+    String username = (String)session.getAttribute("userName");
+    DiskFileItemFactory factory = new DiskFileItemFactory();
+    factory.setSizeThreshold(1024);
+    factory.setRepository(new File(destination));
+    ServletFileUpload uploader = new ServletFileUpload(factory);
+    
+    try {
+        List items = uploader.parseRequest(request);
+        Iterator iterator = items.iterator();
+
+        while (iterator.hasNext()) {
+            FileItem item = (FileItem) iterator.next();
+            String fileName = item.getName();
+            String fileExtension = FilenameUtils.getExtension(fileName);
+            String baseName = FilenameUtils.getBaseName(fileName);
+            String timestamp = Long.toString(System.currentTimeMillis());
+            String newFileName = baseName + "-" + timestamp + "." + fileExtension;
+            File file = new File(destination, newFileName);
+            item.write(file);
+            String filename = '"' + newFileName + '"';
+            appDBAuth.setProfilePicture(filename, username);
+            out.write(file.getName() + " Uploaded");
+        }
+        response.sendRedirect("homePage.jsp");
+
+    }
+
+    catch (FileUploadException e) {
+        out.write(e.getMessage());
+    }
+
+    catch (Exception e) {
+        out.write(e.getMessage());
+    }
+%>

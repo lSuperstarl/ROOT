@@ -32,6 +32,7 @@
         String username = request.getParameter("username");
         applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
         appDBAuth.removeUser(username);
+        response.sendRedirect("homePage.jsp");
     %>
 
 </body>
