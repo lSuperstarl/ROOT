@@ -42,12 +42,4 @@
 
    </servlet-mapping>
 
-   <servlet>
-        <servlet-name>FileUploadHandler</servlet-name>
-        <servlet-class>FileUploadHandler</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>FileUploadHandler</servlet-name>
-        <url-pattern>/cpen410/upload</url-pattern>
-    </servlet-mapping>
 </web-app>
