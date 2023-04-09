@@ -75,7 +75,6 @@
     while (imageResultSet.next()) {
         image = imageResultSet.getString(1);
     }
-    System.out.println(image);
 %> 
 <p>
     Hello <%= username %>! <br>

@@ -2,18 +2,29 @@
 <%@ page import="java.io.*" %>
 <%@ page import="ut.JAR.CPEN410.*"%>
 <%
-if ((session.getAttribute("userName")==null) || (session.getAttribute("currentPage")==null)){
+// Check if the "userName" or "currentPage" attribute is null in the current session
+if ((session.getAttribute("userName") == null) || (session.getAttribute("currentPage") == null)) {
+    // If either of them is null, set the session attributes to null
     session.setAttribute("currentPage", null);
     session.setAttribute("userName", null);
+    // Redirect the user to the login page
     response.sendRedirect("login.html");
-} else if (!session.getAttribute("userName").equals("admin")) {
+} 
+// Check if the "userName" attribute is not equal to "admin"
+else if (!session.getAttribute("userName").equals("admin")) {
+    // If it is not, set the session attributes to null
     session.setAttribute("currentPage", null);
     session.setAttribute("userName", null);
+    // Redirect the user to the login page
     response.sendRedirect("login.html");
-} else {
-    String currentPage= "adminAddUser.jsp";
+}
+// If the "userName" attribute is equal to "admin"
+else {
+    // Set the current page and previous page
+    String currentPage = "adminAddUser.jsp";
     String previousPage = session.getAttribute("currentPage").toString();
     try {
+        // Get the user input parameters
         String userToAdd = request.getParameter("userName");
         String userPass = request.getParameter("userPass");
         String completeName = request.getParameter("completeName");
@@ -28,28 +39,43 @@ if ((session.getAttribute("userName")==null) || (session.getAttribute("currentPa
         String degree = request.getParameter("degree");
         String school = request.getParameter("school");
 
+        // Create a new instance of an authentication class
         applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
 
+        // Verify the user with the current and previous page
         ResultSet res = appDBAuth.verifyUser((String)session.getAttribute("userName"), currentPage, previousPage);
 
+        // If the verification is successful
         if (res.next()) {
+            // Get the user's actual name
             String userActualName=res.getString(2);
+            // Set the current page attribute in the session to "adminAddUser.jsp"
             session.setAttribute("currentPage", "adminAddUser.jsp");
+            // Add the user to the database
             appDBAuth.addUser(userToAdd, completeName, userPass, telephone, dateOfBirth, gender, userEmail, street, town, state, country, degree, school);
+            // Redirect the user to the home page
             response.sendRedirect("homePage.jsp");
-
-        } else {
+        } 
+        // If the verification fails
+        else {
+            // Close the ResultSet and authentication class
             res.close();
             appDBAuth.close();
+            // Redirect the user to the home page
             response.sendRedirect("homePage.jsp");
-
         }
-    } catch(Exception e) {
+    } 
+    // If there is an exception
+    catch(Exception e) {
+        // Print the stack trace of the exception
         e.printStackTrace();
+        // Redirect the user to the home page
         response.sendRedirect("homePage.jsp");
-
-    } finally {
+    } 
+    // Finally, print "Finally" to the console
+    finally {
         System.out.println("Finally");
     }
 }
+
 %>

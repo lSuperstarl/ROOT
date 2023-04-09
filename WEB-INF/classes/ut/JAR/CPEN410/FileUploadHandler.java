@@ -13,39 +13,37 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Servlet to handle File upload request from Client
- * @author Javin Paul
+ * @author: Javin Paul
  */
 public class FileUploadHandler extends HttpServlet {
+    // directory to store uploaded files
     private final String UPLOAD_DIRECTORY = "C:\\apache-tomcat-8.5.85\\webapps\\ROOT\\cpen410\\images";
   
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-      
-        //process only if its multipart content
-        if(ServletFileUpload.isMultipartContent(request)){
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // process only if it's multipart content
+        if(ServletFileUpload.isMultipartContent(request)) {
             try {
+                // parse the request to get the file items
                 List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
               
                 for(FileItem item : multiparts){
                     if(!item.isFormField()){
+                        // get the name of the file
                         String name = new File(item.getName()).getName();
-                        item.write( new File(UPLOAD_DIRECTORY + File.separator + name));
+                        // save the file to the server
+                        item.write(new File(UPLOAD_DIRECTORY + File.separator + name));
                     }
                 }
-           
-               //File uploaded successfully
-               request.setAttribute("message", "File Uploaded Successfully");
+                // File uploaded successfully
+                request.setAttribute("message", "File Uploaded Successfully");
             } catch (Exception ex) {
-               request.setAttribute("message", "File Upload Failed due to " + ex);
+                // handle exceptions during file upload
+                request.setAttribute("message", "File Upload Failed due to " + ex);
             }          
-         
-        }else{
-            request.setAttribute("message", "Sorry this Servlet only handles file upload request");
+        } else {
+            // handle non-multipart content
+            request.setAttribute("message", "Sorry, this Servlet only handles file upload requests");
         }
-    
-        request.getRequestDispatcher("/result.jsp").forward(request, response);
-     
     }
-  
 }

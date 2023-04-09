@@ -18,11 +18,7 @@ import javax.servlet.annotation.*;
 	This class authenticate users using userName and passwords
 
 */
-@MultipartConfig(
-		fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
-		maxFileSize = 1024 * 1024 * 10,      // 10 MB
-		maxRequestSize = 1024 * 1024 * 100   // 100 MB
-	)
+
 public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 
 	//myDBConn is an MySQLConnector object for accessing to the database
@@ -43,14 +39,11 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 	}
 	
 	
-	/*******
-		authenticate method
-			Authentication method
-			@parameters:
-			@returns:
-				A ResultSet containing the userName and all roles assigned to her.
-	*/
-
+	/**
+	 * 
+	 * @param username
+	 * @return Boolean to know if a user has been deleted or not
+	 */
 	public boolean removeUser(String username)
 	{
 		MySQLCompleteConnectorPrivileged myDBConn2 = new MySQLCompleteConnectorPrivileged();
@@ -76,7 +69,11 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		System.out.println("Deletion result: " + res);
 		return res;
 	}
-
+	/**
+	 * 
+	 * @param username
+	 * @return ResultSet containing the name of each page
+	 */
 	public ResultSet listPagesAllowedForUser(String username) {
 		MySQLCompleteConnectorPrivileged myDBConn2 = new MySQLCompleteConnectorPrivileged();
 		// Open the connection to the database
@@ -87,22 +84,52 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		return myDBConn.doPageSelect(query);
 	}
 	
+	/**
+	 * 
+	 * @param file
+	 * @param username
+	 */
 	public void setProfilePicture(String file, String username) {
 		String sql = "INSERT INTO picturesForUser (PicturePath, UserName) VALUES (" + file + ", '" + username + "');";
 		myDBConn.doInsertPicture(sql);
 	}
 
+	/**
+	 * 
+	 * @param file
+	 * @param username
+	 */
 	public void updateProfilePicture(String file, String username) {
 		String sql = "UPDATE picturesForUser SET PicturePath = '" + file + "' WHERE UserName = '" + username + "';";
 		myDBConn.doInsertPicture(sql);
 	}
-	
+	/**
+	 * 
+	 * @param username
+	 * @return ResultSet containing the file name of the picture
+	 */
 	public ResultSet getProfilePicture(String username) {
 		String query = "SELECT PicturePath from picturesForUser WHERE username = '" + username + "';";
 
 		return myDBConn.doGetProfilePicture(query);
 	}
 
+	/**
+
+	Modifies a user's information in the database.
+	@param username the username of the user whose information will be modified
+	@param newCompleteName the user's new complete name (optional)
+	@param newUserTelephone the user's new telephone number (optional)
+	@param newUserEmail the user's new email address (optional)
+	@param newStreet the user's new street address (optional)
+	@param newTown the user's new town or city (optional)
+	@param newState the user's new state or province (optional)
+	@param newCountry the user's new country (optional)
+	@param newDegree the user's new degree (optional)
+	@param newSchool the user's new school (optional)
+
+	@return true if the modification was successful, false otherwise
+	*/
 	public boolean modifyUser(String username, String newCompleteName, String newUserTelephone, String newUserEmail, String newStreet, String newTown, String newState, String newCountry, String newDegree, String newSchool) {
 		String setClause = " SET ";
 		System.out.println(username);
@@ -153,6 +180,13 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		return res;
 	}
 
+	/**
+	 * Authenticates a user by verifying their username and password against the database.
+	 *
+	 * @param username the username of the user
+	 * @param password the password of the user
+	 * @return a ResultSet containing the user's username, assigned roles, and name if the authentication was successful, otherwise returns null
+	 */
 	public ResultSet authenticate(String username, String password)
 	{
 		
@@ -202,6 +236,14 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		return myDBConn.doSelect(fields, tables, whereClause);
 	}	
 	
+	/**
+	 * Retrieves the roles assigned to a given user for a given current and previous page.
+	 *
+	 * @param userName      The username of the user whose roles are to be retrieved.
+	 * @param currentPage   The current page being accessed.
+	 * @param previousPage  The previous page visited by the user.
+	 * @return              A ResultSet containing the roles assigned to the user for the given pages.
+	 */
 	public ResultSet verifyUser(String userName, String currentPage, String previousPage)
 	{
 		
@@ -219,7 +261,7 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		whereClause += "roleForWebPage.RoleID = Roles.roleID AND roleForWebPage.Page = webPages.Page AND webPages.Page = '" + currentPage + "' AND ";
 		whereClause += "webPageFlow.previousPage = '" + previousPage + "' AND webPageFlow.currentPage = webPages.Page";
 		
-		query = "SELECT webpageflow.currentpage, webpageflow.previouspage, userinformation.username FROM webpageflow, userinformation";
+		query = "SELECT " + " FROM " + " WHERE " + whereClause;
 
 		System.out.println("listing...");
 		
@@ -227,7 +269,26 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		return myDBConn.doFlowSelect(query);
 		
 	}
-	
+
+	/**
+	 * Adds a new user to the database.
+	 * 
+	 * @param username      The username of the new user.
+	 * @param completeName  The complete name of the new user.
+	 * @param userpass      The password of the new user.
+	 * @param userTelephone The telephone number of the new user.
+	 * @param dateOfBirth   The date of birth of the new user.
+	 * @param gender        The gender of the new user.
+	 * @param userEmail     The email address of the new user.
+	 * @param street        The street of the new user.
+	 * @param town          The town of the new user.
+	 * @param state         The state of the new user.
+	 * @param country       The country of the new user.
+	 * @param degree        The degree of the new user.
+	 * @param school        The school of the new user.
+	 * 
+	 * @return              true if the insertion was successful, false otherwise.
+	 */
 	public boolean addUser(String username, String completeName, String userpass, String userTelephone, String dateOfBirth, String gender, String userEmail, String street, String town, String state, String country, String degree, String school)
 	{
 		boolean res = false;
@@ -248,11 +309,11 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		return res;
 	}
 	
-	/*********
+	/**
 		hashingSha256 method
-			Generates a hash value using the sha256 algorithm.
-			@parameters: Plain text
-			@returns: the hash string based on the plainText
+		Generates a hash value using the sha256 algorithm.
+		@param plainText
+		@return the hash string based on the plainText
 	*/
 	private String hashingSha256(String plainText)
 	{
@@ -260,6 +321,18 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 			return sha256hex;
 	}
 	
+	/**
+	 * Searches for users in the database based on various parameters.
+	 * 
+	 * @param town town of the user
+	 * @param street the street of the user
+	 * @param state the state of the user
+	 * @param country the country of the user
+	 * @param age age of the user
+	 * @param gender gender of the user
+	 * @param name name of the user
+	 * @return a ResultSet containing the search results
+	 */
 	public ResultSet searchUser(String town, String street, String state, String country, String age, String gender, String name) {
 		String fields, tables, whereClause;
 	
