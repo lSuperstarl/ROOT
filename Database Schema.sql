@@ -26,7 +26,7 @@ CREATE TABLE Roles (
   roleID INT NOT NULL AUTO_INCREMENT,
   roleName VARCHAR(50) NOT NULL,
   description VARCHAR(255) NOT NULL,
-  PRIMARY KEY (roleName)
+  PRIMARY KEY (roleID)
 );
 
 CREATE TABLE menuElement (
@@ -86,16 +86,16 @@ INSERT INTO webPages (Page, Description, menuID) VALUES ("addUser.jsp", "This pa
 INSERT INTO webPages (Page, Description, menuID) VALUES ("removeUser.jsp", "This page removes users from the system", 1); 
 INSERT INTO webPages (Page, Description, menuID) VALUES ("searchUser.jsp", "This page searches for users in the database", 1); 
 INSERT INTO webPages (Page, Description, menuID) VALUES ("uploadProfilePicture.html", "User page to upload profile picture upon registration", 1);
-INSERT INTO webPages (Page, Description, menuID) VALUES ("login.html", "The login page");
+INSERT INTO webPages (Page, Description, menuID) VALUES ("login.html", "The login page",1);
 INSERT INTO webPages (Page, Description, menuID) VALUES ("searchUser.html", "The search user page", 2);
-INSERT INTO webPages (Page, Description, menuID) VALUES ("signup.html", "The signup page");
-INSERT INTO webPages (Page, Description, menuID) VALUES ("signout.jsp", "The logout page");
-INSERT INTO webPages (Page, Description, menuID) VALUES ("homePage.html", "The home page");
+INSERT INTO webPages (Page, Description, menuID) VALUES ("signup.html", "The signup page",0);
+INSERT INTO webPages (Page, Description, menuID) VALUES ("signout.jsp", "The logout page",1);
+INSERT INTO webPages (Page, Description, menuID) VALUES ("homePage.html", "The home page",1);
 INSERT INTO webPages (Page, Description, menuID) VALUES ("adminAddUser.html", "Administrator Page to Add User", 1);
 INSERT INTO webPages (Page, Description, menuID) VALUES ("modifyUser.html", "This page adds users to the system", 1); 
 INSERT INTO webPages (Page, Description, menuID) VALUES ("editProfile.html", "Edit user Profile", 1);
 
-INSERT INTO roleForWebPage (roleID, page) VALUES (1, "removeUser.html");
+INSERT INTO roleForWebPage (roleID, page) VALUES (1, "removeUser.jsp");
 INSERT INTO roleForWebPage (roleID, page) VALUES (1, "modifyUser.html");
 INSERT INTO roleForWebPage (roleID, page) VALUES (1, "searchUser.html");
 INSERT INTO roleForWebPage (roleID, page) VALUES (1, "searchUser.html");
