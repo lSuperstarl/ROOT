@@ -7,10 +7,11 @@
 
 <%
     	//Check the authentication process
-	if ((session.getAttribute("userName")==null) || (session.getAttribute("currentPage")==null)){
-		session.setAttribute("currentPage", null);
-		session.setAttribute("userName", null);
-	}
+		if ((session.getAttribute("userName")==null) || (session.getAttribute("currentPage")==null)){
+			session.setAttribute("currentPage", null);
+			session.setAttribute("userName", null);
+			response.sendRedirect("login.html");
+		}
 	else{
 
         String currentPage= "homePage.jsp";

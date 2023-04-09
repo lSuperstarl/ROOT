@@ -47,7 +47,7 @@
 			}else{
 				//Close any session associated with the user
 				session.setAttribute("userName", null);
-				
+				System.out.println("In else if authenticat is null");
 				//return to the login page
 				response.sendRedirect("login.html");
 				}
@@ -67,7 +67,7 @@
 				System.out.println("Finally");
 			}
 			%>		
-		sessionName=<%=session.getAttribute("userName")%>
+		sessionName=<%=session.getAttribute("username")%>
 		
 		
 	</body>

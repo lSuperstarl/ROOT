@@ -7,55 +7,82 @@
 		<title>Mini-Facebook!</title>
 	</head>
 	<body>
+		<%
+    	//Check the authentication process
+		if ((session.getAttribute("userName")==null) || (session.getAttribute("currentPage")==null)){
+			session.setAttribute("currentPage", null);
+			session.setAttribute("userName", null);
+			response.sendRedirect("login.html");
+		}
+	else{
 
-<%
-	//Retrieve variables
-	String userName = session.getAttribute("userName").toString();
-	String newCompleteName = request.getParameter("completeName");
-	String newUserTelephone = request.getParameter("userTelephone");
-	String newUserEmail = request.getParameter("userEmail");
-	String newStreet = request.getParameter("street");
-	String newTown = request.getParameter("town");
-	String newState = request.getParameter("state");
-	String newCountry = request.getParameter("country");
-	String newDegree = request.getParameter("degree");
-	String newSchool = request.getParameter("school");
-    System.out.println(userName);
-	
-	
-	
-	//Try to connect the database using the applicationDBManager class
-	try{
-			//Create the appDBMnger object
-			applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
-			System.out.println("Connecting...");
-			System.out.println(appDBAuth.toString());
-			
-			//Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-			boolean res=appDBAuth.modifyUser(userName, newCompleteName, newUserTelephone, newUserEmail, newStreet, newTown, newState, newCountry, newDegree, newSchool);%>
+        String currentPage= "homePage.jsp";
+		String userName = (String)session.getAttribute("userName");
+		String previousPage = session.getAttribute("currentPage").toString();
 		
-			
-			
-			<%//Verify if the user has been authenticated
-			if (res){%>
-				response.sendRedirect("homePage.jsp");
-			<%}else{
-				//Close any session associated with the user
-				response.sendRedirect("homePage.jsp");
-				%>
-			<%}
+		//Try to connect the database using the applicationDBManager class
+		try{
+				//Create the appDBMnger object
+				applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
+				System.out.println("Connecting...");
+				System.out.println(appDBAuth.toString());
 				
-				//Close the connection to the database
-				appDBAuth.close();
-			
-			} catch(Exception e)
-			{%>
-				Nothing to show!
-				<%e.printStackTrace();
-			}finally{
-				System.out.println("Finally");
-			}
-			%>		
-		sessionName=<%=session.getAttribute("userName")%>
+				//Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
+				ResultSet res = appDBAuth.verifyUser(userName, currentPage, previousPage);
+
+                System.out.println("Printing Result Set: ");
+                System.out.println(res);
+
+				//Verify if the user has been authenticated
+				if (res.next()) {
+					//Retrieve variables
+					String userName = session.getAttribute("userName").toString();
+					String newCompleteName = request.getParameter("completeName");
+					String newUserTelephone = request.getParameter("userTelephone");
+					String newUserEmail = request.getParameter("userEmail");
+					String newStreet = request.getParameter("street");
+					String newTown = request.getParameter("town");
+					String newState = request.getParameter("state");
+					String newCountry = request.getParameter("country");
+					String newDegree = request.getParameter("degree");
+					String newSchool = request.getParameter("school");
+					System.out.println(userName);
+
+					appDBAuth.modifyUser(userName, newCompleteName, newUserTelephone, newUserEmail, newStreet, newTown, newState, newCountry, newDegree, newSchool);
+
+					String userActualName=res.getString(2);
+                    
+                    // Create the current page attribute
+					session.setAttribute("currentPage", "editProfile.jsp");
+
+					//Create a session variable
+					if (session.getAttribute("userName")==null ){
+						//create the session variable
+						session.setAttribute("userName", userName);
+					} else {
+						//Update the session variable
+						session.setAttribute("userName", userName);
+					}
+					
+				} else {
+					//Close any session associated with the user
+					session.setAttribute("userName", null);
+					
+					//return to the login page
+					response.sendRedirect("login.html");
+					}
+					res.close();
+					//Close the connection to the database
+					appDBAuth.close();
+				
+				} catch(Exception e) {
+					e.printStackTrace();
+					response.sendRedirect("login.html");
+				} finally {
+					System.out.println("Finally");
+				}
+				
+	}%>
+		<button onclick="window.location.href = 'homePage.jsp';">Go to Home Page</button>
 	</body>
 </html>
