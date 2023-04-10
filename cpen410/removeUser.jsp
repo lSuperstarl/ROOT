@@ -51,14 +51,14 @@ if ((session.getAttribute("userName") == null) || (session.getAttribute("current
         System.out.println(appDBAuth.toString());
 
         // Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-        ResultSet res = appDBAuth.verifyUser(userName, currentPage, previousPage);
+        boolean res = appDBAuth.verifyUser(userName, currentPage, previousPage);
 
         System.out.println("Printing Result Set: ");
         System.out.println(res);
 
         // Verify if the user has been authenticated
-        if (res.next()) {
-            String userActualName = res.getString(2);
+        if (res) {
+
             // Create the current page attribute
             session.setAttribute("currentPage", "removeUser.jsp");
 
@@ -80,7 +80,6 @@ if ((session.getAttribute("userName") == null) || (session.getAttribute("current
             // Return to the login page
             response.sendRedirect("login.html");
         }
-        res.close();
         // Close the connection to the database
         appDBAuth.close();
 

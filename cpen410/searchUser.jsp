@@ -50,13 +50,10 @@ else{
 			System.out.println(appDBAuth.toString());
 			
 			//Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-			ResultSet res = appDBAuth.verifyUser(userName, currentPage, previousPage);
-
-			System.out.println("Printing Result Set: ");
-			System.out.println(res);
+			boolean res = appDBAuth.verifyUser(userName, currentPage, previousPage);
 
 			//Verify if the user has been authenticated
-			if (res.next()) {
+			if (res) {
 
 				String Name = request.getParameter("completeName");
 				String age = request.getParameter("age");
@@ -136,7 +133,7 @@ else{
 				</table>
 				<%
 
-				String userActualName=res.getString(2);
+
 				
 				// Create the current page attribute
 				session.setAttribute("currentPage", "searchUser.jsp");
@@ -157,7 +154,7 @@ else{
 				//return to the login page
 				response.sendRedirect("login.html");
 				}
-				res.close();
+
 				//Close the connection to the database
 				appDBAuth.close();
 			

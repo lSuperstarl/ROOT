@@ -7,16 +7,17 @@
 
 <%
     	//Check the authentication process
-		if ((session.getAttribute("userName")==null) || (session.getAttribute("currentPage")==null)){
-			session.setAttribute("currentPage", null);
-			session.setAttribute("userName", null);
-			response.sendRedirect("login.html");
-		}
+	if ((session.getAttribute("userName")==null) || (session.getAttribute("currentPage")==null)){
+		session.setAttribute("currentPage", null);
+		session.setAttribute("userName", null);
+		response.sendRedirect("login.html");
+	}
 	else{
 
         String currentPage= "homePage.jsp";
 		String userName = (String)session.getAttribute("userName");
 		String previousPage = session.getAttribute("currentPage").toString();
+		System.out.println("Current page: " + currentPage + ", Username: " + userName + ", Previous Page: " + previousPage);
 		
 		//Try to connect the database using the applicationDBManager class
 		try{
@@ -26,20 +27,16 @@
 				System.out.println(appDBAuth.toString());
 				
 				//Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-				ResultSet res = appDBAuth.verifyUser(userName, currentPage, previousPage);
-
-                System.out.println("Printing Result Set: ");
-                System.out.println(res);
+				boolean res = appDBAuth.verifyUser(userName, currentPage, previousPage);
 
 				//Verify if the user has been authenticated
-				if (res.next()) {
-					String userActualName=res.getString(2);
-                    
+				if (res) {
+					
                     // Create the current page attribute
 					session.setAttribute("currentPage", "homePage.jsp");
 
 					//Create a session variable
-					if (session.getAttribute("userName")==null ){
+					if (session.getAttribute("userName") == null ){
 						//create the session variable
 						session.setAttribute("userName", userName);
 					} else {
@@ -54,7 +51,7 @@
 					//return to the login page
 					response.sendRedirect("login.html");
 					}
-					res.close();
+
 					//Close the connection to the database
 					appDBAuth.close();
 				
@@ -77,7 +74,7 @@
     }
 %> 
 <p>
-    Hello <%= username %>! <br>
+	<h2>Hello <%= username %>!</h2>
     <img src="/cpen410/images/regularusers/<%= image %>" width="100" height="80">
 </p>
 

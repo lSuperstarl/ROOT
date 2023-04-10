@@ -15,7 +15,7 @@ if ((session.getAttribute("userName") == null) || (session.getAttribute("current
     session.setAttribute("userName", null);
     response.sendRedirect("login.html");
 } else {
-    String currentPage = "homePage.jsp";
+    String currentPage = "editProfile.jsp";
     String userName = (String) session.getAttribute("userName");
     String previousPage = session.getAttribute("currentPage").toString();
 
@@ -27,13 +27,11 @@ if ((session.getAttribute("userName") == null) || (session.getAttribute("current
         System.out.println(appDBAuth.toString());
 
         // Call the listAllDepartment method. This method returns a ResultSet containing all the tuples in the table Department
-        ResultSet res = appDBAuth.verifyUser(userName, currentPage, previousPage);
+        boolean res = appDBAuth.verifyUser(userName, currentPage, previousPage);
 
-        System.out.println("Printing Result Set: ");
-        System.out.println(res);
 
         // Verify if the user has been authenticated
-        if (res.next()) {
+        if (res) {
             // Retrieve variables
             String userToChange = session.getAttribute("userName").toString();
             String newCompleteName = request.getParameter("completeName");
@@ -49,7 +47,6 @@ if ((session.getAttribute("userName") == null) || (session.getAttribute("current
 
             appDBAuth.modifyUser(userToChange, newCompleteName, newUserTelephone, newUserEmail, newStreet, newTown, newState, newCountry, newDegree, newSchool);
 
-            String userActualName = res.getString(2);
 
             // Create the current page attribute
             session.setAttribute("currentPage", "editProfile.jsp");
@@ -71,7 +68,6 @@ if ((session.getAttribute("userName") == null) || (session.getAttribute("current
             // Return to the login page
             response.sendRedirect("login.html");
         }
-        res.close();
         // Close the connection to the database
         appDBAuth.close();
     } catch (Exception e) {

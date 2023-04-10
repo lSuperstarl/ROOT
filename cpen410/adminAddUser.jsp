@@ -20,8 +20,8 @@ else if (!session.getAttribute("userName").equals("admin")) {
 }
 // If the "userName" attribute is equal to "admin"
 else {
-    // Set the current page and previous page
     String currentPage = "adminAddUser.jsp";
+    String userName = (String) session.getAttribute("userName");
     String previousPage = session.getAttribute("currentPage").toString();
     try {
         // Get the user input parameters
@@ -43,12 +43,11 @@ else {
         applicationDBAuthenticationGoodComplete appDBAuth = new applicationDBAuthenticationGoodComplete();
 
         // Verify the user with the current and previous page
-        ResultSet res = appDBAuth.verifyUser((String)session.getAttribute("userName"), currentPage, previousPage);
+        boolean res = appDBAuth.verifyUser(userName, currentPage, previousPage);
 
         // If the verification is successful
-        if (res.next()) {
-            // Get the user's actual name
-            String userActualName=res.getString(2);
+        if (res) {
+
             // Set the current page attribute in the session to "adminAddUser.jsp"
             session.setAttribute("currentPage", "adminAddUser.jsp");
             // Add the user to the database
@@ -58,8 +57,6 @@ else {
         } 
         // If the verification fails
         else {
-            // Close the ResultSet and authentication class
-            res.close();
             appDBAuth.close();
             // Redirect the user to the home page
             response.sendRedirect("homePage.jsp");

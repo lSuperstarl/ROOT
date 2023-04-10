@@ -34,10 +34,11 @@ else{
     String newCountry = request.getParameter("country");
     String newDegree = request.getParameter("degree");
     String newSchool = request.getParameter("school");
-    String currentPage= "homePage.jsp";
-    String userName = (String)session.getAttribute("userName");
-    String previousPage = session.getAttribute("currentPage").toString();
     
+    String currentPage = "modifyUser.jsp";
+    String userName = (String) session.getAttribute("userName");
+    String previousPage = session.getAttribute("currentPage").toString();
+
     // Try to connect the database using the applicationDBManager class
     try{
         // Create the appDBMnger object
@@ -46,13 +47,11 @@ else{
         System.out.println(appDBAuth.toString());
         
         // Call the verifyUser method. This method verifies if the user has been authenticated
-        ResultSet res = appDBAuth.verifyUser(userName, currentPage, previousPage);
-        System.out.println("Printing Result Set: ");
-        System.out.println(res);
+        boolean res = appDBAuth.verifyUser(userName, currentPage, previousPage);
 
         // If user has been authenticated
-        if (res.next()) {
-            String userActualName=res.getString(2);
+        if (res) {
+
             // Modify user information in the database using the modifyUser method
             appDBAuth.modifyUser(userToChange, newCompleteName, newUserTelephone, newUserEmail, newStreet, newTown, newState, newCountry, newDegree, newSchool);
 
@@ -72,7 +71,7 @@ else{
             response.sendRedirect("login.html");
         }
         // Close result set
-        res.close();
+
         // Close the connection to the database
         appDBAuth.close();
     } catch(Exception e) {

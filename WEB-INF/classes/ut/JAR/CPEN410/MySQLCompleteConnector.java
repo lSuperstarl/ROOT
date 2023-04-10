@@ -110,16 +110,17 @@ public class MySQLCompleteConnector{
 		}
 	}
 
-	public ResultSet doFlowSelect(String query){
+	public boolean doFlowSelect(String query){
 		//Create a ResulSet
-		ResultSet result=null;
+		boolean result=false;
 		
 		//Create the selection statement 
 		String selectionStatement = query;
+		System.out.println(selectionStatement);
 		
 		try{
 			//perform the query and catch results in the result object
-			result = stmt.executeQuery(selectionStatement);
+			result = stmt.execute(selectionStatement);
 		} catch(Exception e){
 			e.printStackTrace();
 		}

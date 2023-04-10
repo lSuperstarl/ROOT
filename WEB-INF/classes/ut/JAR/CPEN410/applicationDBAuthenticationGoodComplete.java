@@ -244,7 +244,7 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 	 * @param previousPage  The previous page visited by the user.
 	 * @return              A ResultSet containing the roles assigned to the user for the given pages.
 	 */
-	public ResultSet verifyUser(String userName, String currentPage, String previousPage)
+	public boolean verifyUser(String userName, String currentPage, String previousPage)
 	{
 		
 		//Declare function variables
@@ -261,8 +261,7 @@ public class applicationDBAuthenticationGoodComplete extends HttpServlet{
 		whereClause += "roleForWebPage.RoleID = Roles.roleID AND roleForWebPage.Page = webPages.Page AND webPages.Page = '" + currentPage + "' AND ";
 		whereClause += "webPageFlow.previousPage = '" + previousPage + "' AND webPageFlow.currentPage = webPages.Page";
 		
-		query = "SELECT " + " FROM " + " WHERE " + whereClause;
-
+		query = "SELECT " + fields + " FROM " + tables + " WHERE " + whereClause;
 		System.out.println("listing...");
 		
 		//Return the ResultSet containing all roles assigned to the user
