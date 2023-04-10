@@ -130,7 +130,6 @@ INSERT INTO RolesForUser (username, roleID) VALUES ('janesmith', 3);
 INSERT INTO RolesForUser (username, roleID) VALUES ('bobjohnson', 2);
 INSERT INTO RolesForUser (username, roleID) VALUES ('saralee', 1);
 INSERT INTO RolesForUser (username, roleID) VALUES ('tomwilson', 1);
-
 ```
 
 # Page Flow
@@ -145,3 +144,14 @@ INSERT INTO RolesForUser (username, roleID) VALUES ('tomwilson', 1);
 | Search Friends | Home Page | Estando el usuario en su home page, puede buscar amigos dependiendo de varios valores |
 | Home Page | Search Friends | Luego de buscar amigos, debe ser capaz de voler a la pagina de home page o inicio | 
 | Log Out | Home Page | En su home page, debe ser capaz de hacer Log Out |
+
+```cpp
+#include <iostream>
+
+namespace std;
+
+int main() {
+	cout << "Mamawebo" << endl;
+	return 0;
+}
+```
