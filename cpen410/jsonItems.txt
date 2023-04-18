@@ -1,0 +1,41 @@
+
+{
+    "items": [
+               {
+                "id": "001",
+                "name": "Dell Inspiron",
+                "description": "Laptop by Dell",
+                "image": "imagesjson/inspiron.jpg",
+                "department" : "Computer",
+				"category": "Laptop",
+				"price":"$650"
+        },
+        {
+                "id": "002",
+                "name": "HP Pavilion",
+                "description": "Laptop by HP",
+                "image": "imagesjson/pavilion.jpg",
+                "department" : "Computer",
+				"category": "Laptop",
+				"price":"$600"
+        },
+		{
+                "id": "003",
+                "name": "iPhone X",
+                "description": "Very expensive phone",
+                "image": "imagesjson/iphonex.jpg",
+                "department" : "Electronics",
+				"category": "Phone",
+				"price":"$1000"
+        },
+		{
+                "id": "004",
+                "name": "Sangsum Galaxy",
+                "description": "Another expensive phone",
+                "image": "imagesjson/galaxy.jpg",
+                "department" : "Electronics",
+				"category": "Phone",
+				"price":"$900"
+        }
+    ]
+}
