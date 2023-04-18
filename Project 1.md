@@ -1,119 +1,3 @@
-# Database Tables SQL Code
-```sql
-CREATE DATABASE "social_network";
-
-use social_network;
-
-CREATE TABLE department (
- dept_name varchar(20),
- building varchar(20) NOT NULL,
- budget int(11) DEFAULT NULL,
- PRIMARY KEY (dept_name)
-);
-
-CREATE TABLE User (
-	UserName varchar(20),
-	PasswordHash varchar(20) NOT NULL,
-	Name varchar(20) NOT NULL,
-	Telephone varchar(20) NOT NULL,
-	dob varchar(20) NOT NULL,
-	gender varchar(10) NOT NULL,
-	email varchar(100) NOT NULL,
-	PRIMARY KEY (UserName)
-);
-
-CREATE TABLE Role (
-	RoleId varchar(20),
-	Name varchar(20) NOT NULL,
-	Description varchar(20) NOT NULL,
-	PRIMARY KEY (RoleId)
-);
-
-CREATE TABLE RoleUser (
-	UserName varchar(20),
-	RoleId varchar(20),
-	dateAssign date NOT NULL,
-	PRIMARY KEY (UserName, RoleId) 
-);
-
-CREATE TABLE UserGood (
-	UserName varchar(20), 
-	hashing mediumtext NOT NULL, 
-	Name varchar(20) NOT NULL, 
-	Telephone varchar(20) NOT NULL, 
-	PRIMARY KEY (UserName)
-);
-
-CREATE TABLE RoleUserGood (
-	UserName varchar(20),
-	RoleId varchar(20),
-	dateAssign date NOT NULL,
-	PRIMARY KEY (UserName, RoleId) 
-);
-
-CREATE TABLE menuElement (
-	menuID numeric,
-	title varchar(40) NOT NULL,
-	Description mediumtext NOT NULL,
-	PRIMARY KEY (menuID) 
-);
-
-CREATE TABLE webPageGood (
-	pageURL varchar(40),
-	pageTitle varchar(40) NOT NULL,
-	Description mediumtext NOT NULL,
-	menuID numeric,
-	PRIMARY KEY (pageURL),
-	FOREIGN KEY (menuID) REFERENCES menuElement (menuID) ON DELETE CASCADE
-);
-
-CREATE TABLE RoleWebPagegood (
-	RoleId varchar(20),
-	pageURL varchar(20),
-	dateAssign date NOT NULL,
-	PRIMARY KEY (RoleId, pageURL),
-	FOREIGN KEY (pageURL) REFERENCES webPageGood(pageURL) ON DELETE CASCADE,
-	FOREIGN KEY (RoleId) REFERENCES ROLE(RoleId) ON DELETE CASCADE
-);
-
-CREATE TABLE webPagePrevious (
-	currentpageURL varchar(40),
-	previouspageURL varchar(40),
-	PRIMARY KEY (currentpageURL, previouspageURL),
-	FOREIGN KEY (currentpageURL) REFERENCES webPageGood(pageURL) ON DELETE CASCADE,
-	FOREIGN KEY (previouspageURL) REFERENCES webPageGood(pageURL) ON DELETE CASCADE
-);
-
-Insert into menuElement values (1, "Users", "User management");
-Insert into menuElement values (2, "General", "General operations");
-Insert into menuElement values (0, "General pages", "General pages");
-
-Insert into webPageGood values ("validationHashing.jsp", "Validation", " the validation page", 0);
-Insert into webPageGood values ("addUser.jsp", "Add User", "This page adds users to the systems ", 1);
-Insert into webPageGood values ("removeUser.jsp", "Remove User", "This page removes users to the systems", 1);
-Insert into webPageGood values ("searchUser.jsp", "Search User", "This page will search for users in database", 1)
-Insert into webPageGood values ("listUser.jsp", "List Users", "This page lists users to the systems", 2);
-Insert into webPageGood values ("welcomeMenu.jsp", "Welcome", " the welcome page", 0);
-
-Insert into webPAgeprevious values ("welcomeMenu.jsp", "validationHashing.jsp");
-Insert into webPAgeprevious values ("addUser.jsp", "welcomeMenu.jsp");
-Insert into webPAgeprevious values ("addUser.jsp", "listUser.jsp");
-Insert into webPAgeprevious values ("listUser.jsp", "welcomeMenu.jsp");
-
-INSERT INTO roleusergood value ("user1", "rol1", "2018/10/01");
-INSERT INTO roleusergood value ("user2", "rol3", "2018/10/01");
-INSERT INTO roleusergood value ("user3", "rol3", "2018/10/01");
-
-Insert into roleWebPagegood values ("rol1", "addUser.jsp", "2018/10/01");
-Insert into roleWebPagegood values ("rol1", "listUser.jsp", "2018/10/01");
-Insert into roleWebPagegood values ("rol1", "removeUser.jsp", "2018/10/01");
-Insert into roleWebPagegood values ("rol2", "listUser.jsp", "2018/10/01");
-Insert into roleWebPagegood values ("rol3", "listUser.jsp", "2018/10/01");
-Insert into roleWebPagegood values ("rol1", "welcomeMenu.jsp", "2018/10/01");
-Insert into roleWebPagegood values ("rol2", "welcomeMenu.jsp", "2018/10/01");
-Insert into roleWebPagegood values ("rol3", "welcomeMenu.jsp", "2018/10/01");
-```
-
 # Update Tables for Project
 
 ```sql
@@ -246,7 +130,6 @@ INSERT INTO RolesForUser (username, roleID) VALUES ('janesmith', 3);
 INSERT INTO RolesForUser (username, roleID) VALUES ('bobjohnson', 2);
 INSERT INTO RolesForUser (username, roleID) VALUES ('saralee', 1);
 INSERT INTO RolesForUser (username, roleID) VALUES ('tomwilson', 1);
-
 ```
 
 # Page Flow
@@ -262,18 +145,13 @@ INSERT INTO RolesForUser (username, roleID) VALUES ('tomwilson', 1);
 | Home Page | Search Friends | Luego de buscar amigos, debe ser capaz de voler a la pagina de home page o inicio | 
 | Log Out | Home Page | En su home page, debe ser capaz de hacer Log Out |
 
-# Database webPageGood after Page Flow
+```cpp
+#include <iostream>
 
-```sql
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('signUp.jsp', 'welcomePage.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('uploadProfilePicture.jsp', 'signUp.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('login.jsp', 'signUp.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('login.jsp', 'uploadProfilePicture.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('homePage.jsp', 'login.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('logOut.jsp', 'homePage.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('searchUser.jsp', 'homePage.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('editProfile.jsp', 'homePage.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('removeUser.jsp', 'homePage.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('addUser.jsp', 'homePage.jsp');
-INSERT INTO webPagePrevious (currentPage, previousPage) VALUES ('modifyUser.jsp', 'homePage.jsp');
+namespace std;
+
+int main() {
+	cout << "Mamawebo" << endl;
+	return 0;
+}
 ```
