@@ -1,4 +1,4 @@
-package com.example.miniface;
+package com.example.minifacebook;
 
 /*
     CPEN 410 - Mobile, Web, and Internet programming

@@ -1,4 +1,4 @@
-package com.example.miniface;
+package com.example.minifacebook;
 
 import android.content.Intent;
 import android.os.Bundle;

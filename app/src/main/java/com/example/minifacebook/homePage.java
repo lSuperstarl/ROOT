@@ -1,4 +1,4 @@
-package com.example.miniface;
+package com.example.minifacebook;
 
 
 
@@ -37,13 +37,13 @@ public class homePage extends AppCompatActivity {
             userObject = (userClass) i.getSerializableExtra("userObject");
 
             /*El siguiente codigo calcula la edad del usuario
-            *
-            * @param sdf es un objeto de la clase SimpleDataFormat que nos ayuda a ver el format de la fecha
-            * @param fechaNac es un objeto de la clase Date esto convierte la fecha en objeto date
-            * @diff es para calcular la resta entre la fecha de hoy con la que el user puso
-            * @edad es para colocar cual es la edad que tiene el user
-            *
-            * */
+             *
+             * @param sdf es un objeto de la clase SimpleDataFormat que nos ayuda a ver el format de la fecha
+             * @param fechaNac es un objeto de la clase Date esto convierte la fecha en objeto date
+             * @diff es para calcular la resta entre la fecha de hoy con la que el user puso
+             * @edad es para colocar cual es la edad que tiene el user
+             *
+             * */
 
             // Obtener la fecha de nacimiento del usuario como una cadena de texto
             String fechaNacimiento = userObject.getDoB();
@@ -61,7 +61,7 @@ public class homePage extends AppCompatActivity {
                 // Convertir la diferencia en años
                 long edad = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
                 //En el textView de la edad mostrara la edad calculada
-                ((TextView)findViewById(R.id.textViewDoB)).setText((int) edad);
+                ((TextView) findViewById(R.id.textViewDoB)).setText((int) edad);
 
             } catch (ParseException e) {
                 // Manejar cualquier excepción que pueda ocurrir al analizar la fecha de nacimiento
@@ -70,30 +70,11 @@ public class homePage extends AppCompatActivity {
             /*Termina el calculo de la edad del usuario*/
 
             //Access to the object's methods
-            ((TextView)findViewById(R.id.textViewUserName)).setText(userObject.getName());
-            ((TextView)findViewById(R.id.textViewEmailAddress)).setText(userObject.getEmail());
-            ((TextView)findViewById(R.id.textViewGender)).setText(userObject.getGender());
-            ((TextView)findViewById(R.id.textViewAddress)).setText(userObject.getAddress());
+            ((TextView) findViewById(R.id.textViewUserName)).setText(userObject.getName());
+            ((TextView) findViewById(R.id.textViewEmailAddress)).setText(userObject.getEmail());
+            ((TextView) findViewById(R.id.textViewGender)).setText(userObject.getGender());
+            ((TextView) findViewById(R.id.textViewAddress)).setText(userObject.getAddress());
             //anadir la foto
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             //Button btn = (Button)findViewById(R.id.createAccountUserbtn);
         }
-
-
     }
-

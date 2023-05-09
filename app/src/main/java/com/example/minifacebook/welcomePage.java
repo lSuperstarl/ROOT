@@ -1,4 +1,4 @@
-package com.example.miniface;
+package com.example.minifacebook;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +16,9 @@ public class welcomePage extends AppCompatActivity {
         setContentView(R.layout.first_activity);//enlazando la clase de java con el layout
 
         //Sincronizando el boton de login
-        Button btn = (Button) findViewById(R.id.logInbutton);
+        Button logInButton = (Button) findViewById(R.id.logInbutton);
         //You need to create the onClickListener and when clicked, it call the other activity
-        btn.setOnClickListener(new View.OnClickListener() {
+        logInButton.setOnClickListener(new View.OnClickListener() {
 
             //This code detects when the button is clicked
             @Override
@@ -30,6 +30,17 @@ public class welcomePage extends AppCompatActivity {
                // Intent userObject = i.putExtra("userObject", userObject);
 
                 //Start the other activity
+                startActivity(i);
+            }
+        });
+
+        Button createAccount = (Button) findViewById(R.id.createAccountbtn);
+
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(welcomePage.this, signUpPage.class);
+
                 startActivity(i);
             }
         });

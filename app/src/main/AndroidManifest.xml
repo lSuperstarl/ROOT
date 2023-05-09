@@ -10,10 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MiniFace"
-        tools:targetApi="31" />
-		
-	<activity android:name=".welcomePage">
+        android:theme="@style/Theme.MiniFacebook"
+        tools:targetApi="31">
+        <activity android:exported="true" android:name=".welcomePage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,5 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".homePage"></activity>
-		<activity android:name=".signUpPage"></activity>
+        <activity android:name=".signUpPage"></activity>
+    </application>
+
 </manifest>
