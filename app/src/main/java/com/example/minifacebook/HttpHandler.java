@@ -1,4 +1,11 @@
 package com.example.minifacebook;
+/***
+ *  CPEN 410 - Mobile, Web, and Internet Programming
+ *
+ *  This class downloads the JSON data from a web server.
+ *
+ */
+
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -13,33 +20,22 @@ import java.net.URL;
 
 public class HttpHandler {
 
-    private static final String TAG = HttpHandler.class.getSimpleName();
+    // This for debugging
+    private static final String TAG = com.example.minifacebook.HttpHandler.class.getSimpleName();
 
+    /***
+     *  Default constructor
+     */
     public HttpHandler() {
     }
 
-    public String makeServiceCall(String reqUrl) {
-        String response = null;
-        try {
-            URL url = new URL(reqUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            System.out.println(conn.getRequestProperties().toString());
-            // read the response
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            response = convertStreamToString(in);
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "MalformedURLException: " + e.getMessage());
-        } catch (ProtocolException e) {
-            Log.e(TAG, "ProtocolException: " + e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "IOException: " + e.getMessage());
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
-        }
-        return response;
-    }
 
+    /***
+     *  This method downloads the JSON data from a Request URL
+     *
+     * @param reqUrl: Target URL
+     * @return
+     */
     public String makeServiceCallPost(String reqUrl, String userName, String pass) {
         // HTTP Response
         String response = null;
@@ -77,13 +73,53 @@ public class HttpHandler {
         return response;
     }
 
+    /***
+     *  This method downloads the JSON data from a Request URL
+     *
+     * @param reqUrl: Target URL
+     * @return
+     */
+    public String makeServiceCall(String reqUrl) {
+        // HTTP Response
+        String response = null;
+        try {
+            //Generate a URL object from the requested URL
+            URL url = new URL(reqUrl);
+            // Create a Http Connection
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            // Define Request GET
+            conn.setRequestMethod("GET");
+            System.out.println(conn.getRequestProperties().toString());
+            // read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            // Convert the InputStream in a Spring
+            response = convertStreamToString(in);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "MalformedURLException: " + e.getMessage());
+        } catch (ProtocolException e) {
+            Log.e(TAG, "ProtocolException: " + e.getMessage());
+        } catch (IOException e) {
+            Log.e(TAG, "IOException: " + e.getMessage());
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e.getMessage());
+        }
+        return response;
+    }
 
+    /**
+     *  This method generates a String  from a InputStream
+     * @param is: InputStream
+     * @return
+     */
     private String convertStreamToString(InputStream is) {
+        // Generate a BufferedReader from a InputStream
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        // Create a StringBuilder
         StringBuilder sb = new StringBuilder();
 
         String line;
         try {
+            // Traverse the inputStream and generate a String
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append('\n');
             }
@@ -97,6 +133,7 @@ public class HttpHandler {
             }
         }
 
+        // Return the String
         return sb.toString();
     }
 }

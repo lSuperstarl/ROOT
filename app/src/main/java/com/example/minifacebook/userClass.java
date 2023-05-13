@@ -1,92 +1,109 @@
 package com.example.minifacebook;
 
-/*
-    CPEN 410 - Mobile, Web, and Internet programming
-    g.Resto & c.Roque THE ONE PIECE ITS REAL!!
-    This class stores the name, email and date of birth of a user
-*/
+import org.json.JSONObject;
 import java.io.Serializable;
 
-//In order to share the class's objects between activities, it must be serializable
 public class userClass implements Serializable {
 
-
-    //User's name
+    private String id;
     private String name;
-    //user pass pass passwooooord
-    private String hashbrown; //<---- este es el password XD
-    //User's email
     private String email;
-    //User's date of birth
-    private String Dob;
-    //User's gender
+    private String userName;
+    private String dob;
     private String gender;
-    //User's Address
-    private String address;
+    private String profilePicture;
+    private String street;
+    private String town;
+    private String state;
+    private String country;
 
-    /***
-     * Class constructor
-     * @param name : user's name
-     * @param email : user's email address
-     * @param hashbrown : user's password
-     * @param DoB : user's date of birth
+    /**
+     *  Special constructor using the actual values
      */
-    public userClass(String name, String email, String hashbrown, String DoB, String gender)
+    public userClass(String id, String name, String email, String userName, String dob, String gender, String profilePicture, String street, String town, String state, String country)
     {
+        this.id = id;
         this.name = name;
-        this.hashbrown=hashbrown;
         this.email = email;
-        this.Dob = DoB;
-        this.gender=gender;
-        this.address=address;
+        this.userName = userName;
+        this.dob = dob;
+        this.gender = gender;
+        this.profilePicture = profilePicture;
+        this.street = street;
+        this.town = town;
+        this.state = state;
+        this.country = country;
     }
 
     /**
-     *  Access to the user's name
-     * @return user's name (String)
+     *  Special constructor using a Json file with the following syntax:
      */
-    public String getName()
+    public userClass(String jsonFile)
     {
-        return name;
+        try{
+            // Define a JSON object from the received data
+            JSONObject jsonObj = new JSONObject(jsonFile);
+            id = jsonObj.getString("id");
+            name = jsonObj.getString("name");
+            userName = jsonObj.getString("userName");
+            email = jsonObj.getString("email");
+            dob = jsonObj.getString("dob");
+            gender = jsonObj.getString("gender");
+            profilePicture = jsonObj.getString("profilePicture");
+            street = jsonObj.getString("street");
+            town = jsonObj.getString("town");
+            state = jsonObj.getString("state");
+            country = jsonObj.getString("country");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
-     *  Access to the user's hashbrown
-     * @return user's hash (String)
+     *  Observer methods
      */
-    public String getHashbrown()
-    {
-        return hashbrown;
+    public String getId() {
+        return id;
     }
 
-    /***
-     *  Access to the user's email address
-     * @return user's email address (String)
-     */
-    public String getEmail()
-    {
+    public String getName() {
+        return  name;
+    }
+
+    public String getEmail() {
         return email;
     }
 
-    /**
-     *  Access to the user's date of birth
-     * @return user's date of birth
-     */
-    public String getDoB()
-    {
-        return Dob;
+    public String getUserName() {
+        return userName;
     }
 
-    /**
-     *  Access to the user's gender
-     * @return user's gender (String)
-     */
-    public String getGender()
-    {
+    public String getDob() {
+        return dob;
+    }
+
+    public String getGender() {
         return gender;
     }
-    public String getAddress()
-    {
-        return address;
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getCountry() {
+        return country;
     }
 }

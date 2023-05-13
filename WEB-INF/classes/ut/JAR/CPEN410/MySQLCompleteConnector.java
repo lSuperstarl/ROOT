@@ -80,6 +80,39 @@ public class MySQLCompleteConnector{
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean doAuthentication(String username, String hashbrown){
+		// SQL query to get the user with the given username and password hash
+		String query = "SELECT * FROM UserInformation WHERE UserName = '" + username + "' AND PasswordHash = '" + hashbrown + "'";
+		Statement stmt = null;
+		ResultSet rs = null;
+		System.out.println("Running query: " + query);
+	
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+				
+			// If a user is found, return true, else return false
+			if (rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	
+		return false;
+	}
+	
+	
 	/***********
 		doSelect method
 			This method performs a query to the database
@@ -90,6 +123,7 @@ public class MySQLCompleteConnector{
 			@returns:
 				ResulSet result containing the project tuples resulting from the query
 	*/
+	
 	public ResultSet doSelect(String fields, String tables, String where){
 		//Create a ResulSet
 		ResultSet result=null;
