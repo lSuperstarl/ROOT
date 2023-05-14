@@ -4,8 +4,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class userClass implements Serializable {
-
-    private String id;
     private String name;
     private String email;
     private String userName;
@@ -20,9 +18,8 @@ public class userClass implements Serializable {
     /**
      *  Special constructor using the actual values
      */
-    public userClass(String id, String name, String email, String userName, String dob, String gender, String profilePicture, String street, String town, String state, String country)
+    public userClass(String name, String email, String userName, String dob, String gender, String profilePicture, String street, String town, String state, String country)
     {
-        this.id = id;
         this.name = name;
         this.email = email;
         this.userName = userName;
@@ -35,6 +32,8 @@ public class userClass implements Serializable {
         this.country = country;
     }
 
+
+
     /**
      *  Special constructor using a Json file with the following syntax:
      */
@@ -43,7 +42,6 @@ public class userClass implements Serializable {
         try{
             // Define a JSON object from the received data
             JSONObject jsonObj = new JSONObject(jsonFile);
-            id = jsonObj.getString("id");
             name = jsonObj.getString("name");
             userName = jsonObj.getString("userName");
             email = jsonObj.getString("email");
@@ -63,9 +61,6 @@ public class userClass implements Serializable {
     /**
      *  Observer methods
      */
-    public String getId() {
-        return id;
-    }
 
     public String getName() {
         return  name;

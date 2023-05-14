@@ -29,7 +29,9 @@
         <activity
             android:name=".friends_list"
             android:exported="false" />
-        <activity android:name=".homePage" />
+        <activity
+            android:name=".homePage"
+            android:exported="false" />
     </application>
 
 </manifest>

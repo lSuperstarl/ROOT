@@ -1,53 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".friends_list">
 
-    <ImageView
-        android:id="@+id/userPfp2"
-        android:layout_width="63dp"
-        android:layout_height="59dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="131dp"
-        tools:srcCompat="@tools:sample/avatars" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_friend" />
 
-    <ImageView
-        android:id="@+id/userPfp"
-        android:layout_width="63dp"
-        android:layout_height="59dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="131dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <EditText
-        android:id="@+id/txtAge"
-        android:layout_width="75dp"
-        android:layout_height="49dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Age"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="170dp" />
-
-    <EditText
-        android:id="@+id/txtLocation"
-        android:layout_width="138dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="119dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Location"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="171dp" />
-
-    <TextView
-        android:id="@+id/textUsername"
-        android:layout_width="214dp"
-        android:layout_height="40dp"
-        android:text="Username"
-        tools:layout_editor_absoluteX="79dp"
-        tools:layout_editor_absoluteY="130dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

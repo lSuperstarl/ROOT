@@ -194,6 +194,24 @@ public class MySQLCompleteConnector{
 		}
 	}
 	
+	public ResultSet doSelect(String query){
+		//Create a ResulSet
+		ResultSet result=null;
+		
+		//Create the selection statement 
+		String selectionStatement = query;
+		
+		try{
+			//perform the query and catch results in the result object
+			result = stmt.executeQuery(selectionStatement);
+		} catch(Exception e){
+			e.printStackTrace();
+		} finally {
+			//return results
+			return result;
+		}
+	}
+
 	/***********
 		doSelect method
 			This method performs a query to the database
@@ -255,7 +273,7 @@ public class MySQLCompleteConnector{
 	public boolean doInsert(String table, String values)
 	{
 		boolean res=false;
-		String charString ="INSERT INTO "+ table + " values (" + values +");";
+		String charString = "INSERT INTO " + table + " values (" + values + ");";
 		System.out.println(charString);
 		//try to insert a record to the selected table
 		try{
