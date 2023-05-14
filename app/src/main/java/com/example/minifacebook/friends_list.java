@@ -96,27 +96,9 @@ public class friends_list extends AppCompatActivity {
             public void bind(userClass friend) {
                 // Set the views here using the friend object
                 // Obtain the user's date of birth as a string
-                String fechaNacimiento = friend.getDob();
 
-                // Create a SimpleDateFormat object to parse the date of birth
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
-
-                try {
-                    // Convert the date of birth into a Date object
-                    Date fechaNac = sdf.parse(fechaNacimiento);
-
-                    // Calculate the difference between the current date and the date of birth
-                    long diff = new Date().getTime() - fechaNac.getTime();
-
-                    // Convert the difference into years
-                    long edad = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
-                    // Display the calculated age in the DoB TextView
-                    ((TextView) findViewById(R.id.textAge)).setText(String.valueOf(edad));
-
-                } catch (ParseException e) {
-                    // Handle any exception that may occur when parsing the date of birth
-                    e.printStackTrace();
-                }
+                String edad = friend.getDob();
+                textAge.setText(String.valueOf(edad));
                 textLocation.setText(friend.getCountry());
                 textName.setText(friend.getName());
                 textGender.setText(friend.getGender());

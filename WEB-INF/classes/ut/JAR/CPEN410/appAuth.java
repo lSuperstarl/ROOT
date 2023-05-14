@@ -124,7 +124,6 @@ public class appAuth extends HttpServlet {
 	public String doSearch(String gender, String location, String dob) {
 		String fields = "userinformation.*, addressinformation.*, picturesforuser.PicturePath";
 		String tables = "userinformation INNER JOIN addressinformation ON userinformation.UserName = addressinformation.UserName INNER JOIN picturesforuser ON userinformation.UserName = picturesforuser.UserName";
-
 		String whereClause = "";
 
 		if (gender != null && !gender.isEmpty()) {
@@ -153,6 +152,7 @@ public class appAuth extends HttpServlet {
 
 		try {
 			ResultSet userInfo = myDBConn.doSelect(query);
+			// String imageQuery = "SELECT PicturePath FROM picturesforuser WHERE UserName = '"+userInfo.getString("UserName")+"';";
 			StringBuilder msg = new StringBuilder("{\n\"userlist\": [\n");
 		
 			while (userInfo.next()) {
@@ -165,13 +165,14 @@ public class appAuth extends HttpServlet {
 				String image = userInfo.getString("PicturePath");
 				String username = userInfo.getString("userName");
 				String dobUser = userInfo.getString("dob");
+				String genderUser = userInfo.getString("gender");
 		
 				msg.append("{\n");
 				msg.append("\t\"name\": \"" + name + "\",\n");
 				msg.append("\t\"email\": \"" + email + "\",\n");
 				msg.append("\t\"userName\": \"" + username + "\",\n");
 				msg.append("\t\"dob\": \"" + dobUser + "\",\n");
-				msg.append("\t\"gender\": \"" + gender + "\",\n");
+				msg.append("\t\"gender\": \"" + genderUser + "\",\n");
 				msg.append("\t\"profilePicture\": \"" + image + "\",\n");
 				msg.append("\t\"street\": \"" + street + "\",\n");
 				msg.append("\t\"town\": \"" + town + "\",\n");
