@@ -122,11 +122,31 @@ public class appAuth extends HttpServlet {
 	}
 
 	public String doSearch(String gender, String location, String dob) {
-		String fields, tables, whereClause;
+		String fields = "userinformation.*, addressinformation.*, picturesforuser.PicturePath";
+		String tables = "userinformation INNER JOIN addressinformation ON userinformation.UserName = addressinformation.UserName INNER JOIN picturesforuser ON userinformation.UserName = picturesforuser.UserName";
 
-		fields = "userinformation.*, addressinformation.*, picturesforuser.PicturePath";
-		tables = "userinformation INNER JOIN addressinformation ON userinformation.UserName = addressinformation.UserName INNER JOIN picturesforuser ON userinformation.UserName = picturesforuser.UserName";
-		whereClause = "userinformation.gender = '" + gender + "'" + " AND addressinformation.country = '" + location + "'" + " AND userinformation.dob = '" + dob + "';";
+		String whereClause = "";
+
+		if (gender != null && !gender.isEmpty()) {
+			whereClause += "userinformation.gender = '" + gender + "'";
+		}
+
+		if (location != null && !location.isEmpty()) {
+			if (!whereClause.isEmpty()) {
+				whereClause += " AND ";
+			}
+			whereClause += "addressinformation.country = '" + location + "'";
+		}
+
+		if (dob != null && !dob.isEmpty()) {
+			if (!whereClause.isEmpty()) {
+				whereClause += " AND ";
+			}
+			whereClause += "userinformation.dob = '" + dob + "'";
+		}
+
+		whereClause += ";";
+
 
 		String query = "SELECT " + fields + " FROM " + tables + " WHERE " + whereClause;
 		System.out.println(query);
@@ -144,12 +164,13 @@ public class appAuth extends HttpServlet {
 				String email = userInfo.getString("email");
 				String image = userInfo.getString("PicturePath");
 				String username = userInfo.getString("userName");
+				String dobUser = userInfo.getString("dob");
 		
 				msg.append("{\n");
 				msg.append("\t\"name\": \"" + name + "\",\n");
 				msg.append("\t\"email\": \"" + email + "\",\n");
 				msg.append("\t\"userName\": \"" + username + "\",\n");
-				msg.append("\t\"dob\": \"" + dob + "\",\n");
+				msg.append("\t\"dob\": \"" + dobUser + "\",\n");
 				msg.append("\t\"gender\": \"" + gender + "\",\n");
 				msg.append("\t\"profilePicture\": \"" + image + "\",\n");
 				msg.append("\t\"street\": \"" + street + "\",\n");

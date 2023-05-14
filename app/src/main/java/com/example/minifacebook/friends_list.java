@@ -1,6 +1,11 @@
 package com.example.minifacebook;
 
+import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +18,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class friends_list extends AppCompatActivity {
     private RecyclerView friendsRecyclerView;
@@ -71,6 +82,7 @@ public class friends_list extends AppCompatActivity {
             private TextView textGender;
             private TextView textAge;
             private ImageView userPfp;
+            private Handler handler = new Handler(Looper.getMainLooper());
 
             public FriendViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -83,7 +95,59 @@ public class friends_list extends AppCompatActivity {
 
             public void bind(userClass friend) {
                 // Set the views here using the friend object
-                // You can use the same code you were using before to set the views
+                // Obtain the user's date of birth as a string
+                String fechaNacimiento = friend.getDob();
+
+                // Create a SimpleDateFormat object to parse the date of birth
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+
+                try {
+                    // Convert the date of birth into a Date object
+                    Date fechaNac = sdf.parse(fechaNacimiento);
+
+                    // Calculate the difference between the current date and the date of birth
+                    long diff = new Date().getTime() - fechaNac.getTime();
+
+                    // Convert the difference into years
+                    long edad = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
+                    // Display the calculated age in the DoB TextView
+                    ((TextView) findViewById(R.id.textAge)).setText(String.valueOf(edad));
+
+                } catch (ParseException e) {
+                    // Handle any exception that may occur when parsing the date of birth
+                    e.printStackTrace();
+                }
+                textLocation.setText(friend.getCountry());
+                textName.setText(friend.getName());
+                textGender.setText(friend.getGender());
+                // You need to load the user's profile picture into userPfp.
+                // This depends on what type of data userPfp is and how you're loading images.
+                String imageURL = "http://192.168.48.129:1337/cpen410/images/regularusers/" + friend.getProfilePicture();
+
+                // Start a new Thread for image downloading
+                new Thread(() -> {
+                    final Drawable actualImage = LoadImageFromWebOperations(imageURL);
+                    // Use the Handler to post back to main thread
+                    handler.post(() -> {
+                        ImageView userImage = findViewById(R.id.userPfp);
+                        if (actualImage != null) {
+                            userImage.setImageDrawable(actualImage);
+                        } else {
+                            Log.e("LoadImageFromWeb", "Failed to load image from " + imageURL);
+                        }
+                    });
+                }).start();
+            }
+
+            public Drawable LoadImageFromWebOperations(String url) {
+                try {
+                    InputStream is = (InputStream) new URL(url).getContent();
+                    Drawable d = Drawable.createFromStream(is, "src name");
+                    return d;
+                } catch (Exception e) {
+                    Log.e("LoadImageFromWeb", "Failed to load image from " + url, e);
+                    return null;
+                }
             }
         }
     }

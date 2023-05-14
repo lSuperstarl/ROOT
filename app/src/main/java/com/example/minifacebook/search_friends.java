@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class search_friends extends AppCompatActivity {
     private Button searchButton;
     private EditText genderInput;
@@ -45,8 +47,7 @@ public class search_friends extends AppCompatActivity {
         });
     }
 
-    private class SearchFriendsTask extends AsyncTask<String, Void, Void> {
-
+    private class SearchFriendsTask extends AsyncTask<String, Void, String> {
         // Server response
         private String serverResponse;
 
@@ -55,7 +56,7 @@ public class search_friends extends AppCompatActivity {
          * @param params: String array containing the search parameters (gender, location, age)
          * @return
          */
-        protected Void doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             // Get the search parameters
             String gender = params[0];
             String location = params[1];
@@ -63,33 +64,37 @@ public class search_friends extends AppCompatActivity {
             HttpHandler HttpHandler = new HttpHandler();
 
             // Make the HTTP request and receive the server response
-            String response = HttpHandler.makeServiceCallPostSearch("http://192.168.48.129:1337/appAuth", gender, location, age);
-
-            // Convert the JSON response into a UserClass object
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                userClass friend = new userClass(jsonObject.toString());
-
-                // Now, friend is a UserClass object that you can use to update your UI
-                // For example, you can start a new Activity and pass the friend object as an extra
-
-                Intent intent = new Intent(search_friends.this, friends_list.class);
-                intent.putExtra("friend", friend);
-                startActivity(intent);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
+            serverResponse = HttpHandler.makeServiceCallPostSearch("http://192.168.48.129:1337/appAuth", gender, location, age);
+            return serverResponse;
         }
 
         /***
          *  This method runs after the doInBackground method is completed
          * @param result
          */
-        protected void onPostExecute(Void result) {
-            // Handle any UI updates or display a toast message
+        protected void onPostExecute(String result) {
+            // Create a list to store the friends
+            ArrayList<userClass> friends = new ArrayList<>();
+
+            // Convert the JSON response into a UserClass object
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("userlist");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject userObject = jsonArray.getJSONObject(i);
+                    userClass friend = new userClass(userObject.toString());
+                    friends.add(friend);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Now, friends is a ArrayList<userClass> object that you can use to update your UI
+            // For example, you can start a new Activity and pass the friend object as an extra
+
+            Intent intent = new Intent(search_friends.this, friends_list.class);
+            intent.putExtra("friends", friends);
+            startActivity(intent);
         }
     }
 }
