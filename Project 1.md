@@ -145,13 +145,3 @@ INSERT INTO RolesForUser (username, roleID) VALUES ('tomwilson', 1);
 | Home Page | Search Friends | Luego de buscar amigos, debe ser capaz de voler a la pagina de home page o inicio | 
 | Log Out | Home Page | En su home page, debe ser capaz de hacer Log Out |
 
-```cpp
-#include <iostream>
-
-namespace std;
-
-int main() {
-	cout << "Mamawebo" << endl;
-	return 0;
-}
-```
